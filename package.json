@@ -1,0 +1,31 @@
+{
+  "name": "poqpoq-script-engine",
+  "version": "0.1.0",
+  "description": "Modular scripting engine for poqpoq World — TypeScript-based with LSL/OSSL backward compatibility",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "tsc --noEmit",
+    "transpile": "tsx src/transpiler/cli.ts"
+  },
+  "keywords": [
+    "lsl",
+    "ossl",
+    "opensim",
+    "secondlife",
+    "metaverse",
+    "scripting",
+    "poqpoq",
+    "babylonjs",
+    "virtual-world"
+  ],
+  "author": "Allen Partridge <allen@poqpoq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/increasinglyHuman/lsl-ossl-poqpoq.git"
+  }
+}
