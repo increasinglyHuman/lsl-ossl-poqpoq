@@ -25,3 +25,5 @@ export {
   ControlFlag,
   ChangeFlag,
 } from "./events.js";
+export type { ScriptContainer, Asset, AssetType, LinkTarget } from "./script-container.js";
+export { LINK_SET, LINK_ALL_OTHERS, LINK_ALL_CHILDREN, LINK_THIS, LINK_ROOT } from "./script-container.js";

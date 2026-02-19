@@ -10,6 +10,16 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/language-TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/runtime-Web_Workers_+_SES-4B32C3" alt="Web Workers + SES" />
+  <img src="https://img.shields.io/badge/engine-Babylon.js-E8542E?logo=webgl&logoColor=white" alt="Babylon.js" />
+  <img src="https://img.shields.io/badge/editor-Monaco-007ACC?logo=visualstudiocode&logoColor=white" alt="Monaco Editor" />
+  <img src="https://img.shields.io/badge/compat-LSL_%2F_OSSL-8B5CF6" alt="LSL/OSSL Compatible" />
+  <img src="https://img.shields.io/badge/license-MIT-22C55E" alt="MIT License" />
+  <img src="https://img.shields.io/badge/phase-2_of_6-F59E0B" alt="Phase 2 of 6" />
+</p>
+
+<p align="center">
   <a href="LICENSE">MIT License</a> ·
   <a href="docs/adr/ADR-001-language-and-runtime-architecture.md">Architecture (ADR-001)</a> ·
   <a href="https://poqpoq.com/world/">poqpoq World</a>
@@ -107,8 +117,8 @@ docs/adr/       Architecture Decision Records
 | Phase | Status | What |
 |-------|--------|------|
 | 1. Foundation | **Done** | Core types, World API, LSL mapping table |
-| 2. Runtime | Next | Web Worker sandbox, SES, event dispatch |
-| 3. Transpiler | Planned | LSL lexer/parser/codegen |
+| 2. Runtime | **Done** | Worker pool, SES sandbox, event dispatch, timers, inter-script messaging |
+| 3. Transpiler | Next | LSL lexer/parser/codegen |
 | 4. Editor | Planned | Monaco + IntelliSense + dual TS/LSL mode |
 | 5. Integration | Planned | Babylon.js wiring, OAR import, NEXUS sync |
 | 6. Polish | Planned | Example library, docs, migration guide |

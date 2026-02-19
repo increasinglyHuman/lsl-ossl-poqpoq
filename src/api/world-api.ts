@@ -103,6 +103,12 @@ export interface WorldAPI {
   /** Listen on channel — maps to llListen */
   listen(channel: number, name?: string, id?: string, message?: string): ListenHandle;
 
+  /**
+   * Send link message — maps to llMessageLinked.
+   * Routes through the LinkMessageBus to all matching scripts in the container.
+   */
+  sendLinkMessage(link: number, num: number, str: string, id: string): void;
+
   // === Agents ===
 
   /** Get agent by ID */

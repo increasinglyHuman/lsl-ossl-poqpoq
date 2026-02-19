@@ -42,6 +42,7 @@ export const LSL_FUNCTION_MAP: FunctionMapping[] = [
   { lsl: "llListenRemove", api: "handle.remove()", category: "communication", status: "mapped", notes: "Uses handle pattern instead of integer ID" },
   { lsl: "llInstantMessage", api: "this.world.getAgent(id)?.sendMessage(message)", category: "communication", status: "mapped" },
   { lsl: "llOwnerSay", api: "this.say(0, message)", category: "communication", status: "mapped", notes: "Channel 0 to owner only" },
+  { lsl: "llMessageLinked", api: "this.sendLinkMessage(link, num, str, id)", category: "communication", status: "mapped", notes: "Broadcasts within container; supports LINK_SET, LINK_THIS, LINK_ROOT, LINK_ALL_OTHERS, LINK_ALL_CHILDREN" },
 
   // === Object Manipulation ===
   { lsl: "llSetPos", api: "this.object.setPosition(pos)", category: "object", status: "mapped", notes: "Returns Promise, no 0.2s delay" },

@@ -21,6 +21,7 @@ import type { Agent } from "./agent.js";
 import type { WorldObject } from "./world-object.js";
 import type { ScriptEventHandlers, ScriptPermission } from "./events.js";
 import type { WorldAPI } from "../api/world-api.js";
+import type { ScriptContainer, LinkTarget } from "./script-container.js";
 
 /** State definition — a map of event handler methods */
 export type StateDefinition = Partial<ScriptEventHandlers>;
@@ -57,6 +58,12 @@ export abstract class WorldScript implements ScriptEventHandlers {
 
   /** The agent who owns this script/object */
   readonly owner!: Agent;
+
+  /** The container this script lives in (object + inventory + sibling scripts) */
+  readonly container!: ScriptContainer;
+
+  /** Unique ID for this script instance */
+  readonly scriptId!: string;
 
   // === State Machine ===
 
@@ -127,6 +134,21 @@ export abstract class WorldScript implements ScriptEventHandlers {
     message?: string
   ): ListenHandle {
     return this.world.listen(channel, name, id, message);
+  }
+
+  // === Inter-Script Messaging ===
+
+  /**
+   * Send a link message to scripts in this container.
+   * Maps to llMessageLinked(link, num, str, id).
+   *
+   * @param link Target: LINK_SET (-1), LINK_THIS (-4), LINK_ROOT (0), or link number
+   * @param num Integer message type (convention: apps reserve ranges)
+   * @param str String payload
+   * @param id Key/UUID payload
+   */
+  sendLinkMessage(link: LinkTarget, num: number, str: string, id: string): void {
+    this.container.sendLinkMessage(link, num, str, id);
   }
 
   // === Timers ===
@@ -225,4 +247,5 @@ export abstract class WorldScript implements ScriptEventHandlers {
   onTouchEnd?(agent: Agent, face: number): void | Promise<void>;
   onTimer?(timerId?: string): void | Promise<void>;
   onListen?(channel: number, name: string, id: string, message: string): void | Promise<void>;
+  onLinkMessage?(senderLink: number, num: number, str: string, id: string): void | Promise<void>;
 }

@@ -9,7 +9,7 @@ export class Vector3 {
   constructor(
     public x: number = 0,
     public y: number = 0,
-    public z: number = 0
+    public z: number = 0,
   ) {}
 
   add(other: Vector3): Vector3 {
@@ -32,7 +32,7 @@ export class Vector3 {
     return new Vector3(
       this.y * other.z - this.z * other.y,
       this.z * other.x - this.x * other.z,
-      this.x * other.y - this.y * other.x
+      this.x * other.y - this.y * other.x,
     );
   }
 
@@ -78,9 +78,15 @@ export class Vector3 {
 
   /** Parse LSL-style vector string: "<1.0, 2.0, 3.0>" */
   static fromLSL(str: string): Vector3 {
-    const match = str.match(/<\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*>/);
+    const match = str.match(
+      /<\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*>/,
+    );
     if (!match) throw new Error(`Invalid LSL vector: ${str}`);
-    return new Vector3(parseFloat(match[1]), parseFloat(match[2]), parseFloat(match[3]));
+    return new Vector3(
+      parseFloat(match[1]),
+      parseFloat(match[2]),
+      parseFloat(match[3]),
+    );
   }
 }
 
@@ -90,7 +96,7 @@ export class Quaternion {
     public x: number = 0,
     public y: number = 0,
     public z: number = 0,
-    public s: number = 1 // LSL uses 's' for the scalar component, not 'w'
+    public s: number = 1, // LSL uses 's' for the scalar component, not 'w'
   ) {}
 
   multiply(other: Quaternion): Quaternion {
@@ -98,20 +104,33 @@ export class Quaternion {
       this.s * other.x + this.x * other.s + this.y * other.z - this.z * other.y,
       this.s * other.y - this.x * other.z + this.y * other.s + this.z * other.x,
       this.s * other.z + this.x * other.y - this.y * other.x + this.z * other.s,
-      this.s * other.s - this.x * other.x - this.y * other.y - this.z * other.z
+      this.s * other.s - this.x * other.x - this.y * other.y - this.z * other.z,
     );
   }
 
   normalize(): Quaternion {
-    const len = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.s * this.s);
+    const len = Math.sqrt(
+      this.x * this.x + this.y * this.y + this.z * this.z + this.s * this.s,
+    );
     if (len === 0) return new Quaternion();
-    return new Quaternion(this.x / len, this.y / len, this.z / len, this.s / len);
+    return new Quaternion(
+      this.x / len,
+      this.y / len,
+      this.z / len,
+      this.s / len,
+    );
   }
 
   inverse(): Quaternion {
-    const norm = this.x * this.x + this.y * this.y + this.z * this.z + this.s * this.s;
+    const norm =
+      this.x * this.x + this.y * this.y + this.z * this.z + this.s * this.s;
     if (norm === 0) return new Quaternion();
-    return new Quaternion(-this.x / norm, -this.y / norm, -this.z / norm, this.s / norm);
+    return new Quaternion(
+      -this.x / norm,
+      -this.y / norm,
+      -this.z / norm,
+      this.s / norm,
+    );
   }
 
   /** Convert to Euler angles (degrees) — matches llRot2Euler behavior */
@@ -121,9 +140,8 @@ export class Quaternion {
     const roll = Math.atan2(sinr_cosp, cosr_cosp);
 
     const sinp = 2 * (this.s * this.y - this.z * this.x);
-    const pitch = Math.abs(sinp) >= 1
-      ? Math.sign(sinp) * Math.PI / 2
-      : Math.asin(sinp);
+    const pitch =
+      Math.abs(sinp) >= 1 ? (Math.sign(sinp) * Math.PI) / 2 : Math.asin(sinp);
 
     const siny_cosp = 2 * (this.s * this.z + this.x * this.y);
     const cosy_cosp = 1 - 2 * (this.y * this.y + this.z * this.z);
@@ -164,7 +182,7 @@ export class Quaternion {
       sr * cp * cy - cr * sp * sy,
       cr * sp * cy + sr * cp * sy,
       cr * cp * sy - sr * sp * cy,
-      cr * cp * cy + sr * sp * sy
+      cr * cp * cy + sr * sp * sy,
     );
   }
 
@@ -178,13 +196,15 @@ export class Quaternion {
 
   /** Parse LSL-style rotation string: "<0.0, 0.0, 0.0, 1.0>" */
   static fromLSL(str: string): Quaternion {
-    const match = str.match(/<\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*>/);
+    const match = str.match(
+      /<\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*,\s*([-\d.]+)\s*>/,
+    );
     if (!match) throw new Error(`Invalid LSL rotation: ${str}`);
     return new Quaternion(
       parseFloat(match[1]),
       parseFloat(match[2]),
       parseFloat(match[3]),
-      parseFloat(match[4])
+      parseFloat(match[4]),
     );
   }
 }
@@ -194,7 +214,7 @@ export class Color3 {
   constructor(
     public r: number = 0,
     public g: number = 0,
-    public b: number = 0
+    public b: number = 0,
   ) {}
 
   toVector3(): Vector3 {
@@ -202,7 +222,10 @@ export class Color3 {
   }
 
   toHex(): string {
-    const toHex = (c: number) => Math.round(c * 255).toString(16).padStart(2, "0");
+    const toHex = (c: number) =>
+      Math.round(c * 255)
+        .toString(16)
+        .padStart(2, "0");
     return `#${toHex(this.r)}${toHex(this.g)}${toHex(this.b)}`;
   }
 
@@ -221,7 +244,7 @@ export class Color3 {
     return new Color3(
       parseInt(h.substring(0, 2), 16) / 255,
       parseInt(h.substring(2, 4), 16) / 255,
-      parseInt(h.substring(4, 6), 16) / 255
+      parseInt(h.substring(4, 6), 16) / 255,
     );
   }
 
