@@ -15,6 +15,12 @@ import { transpile } from "./transpile.js";
 import { BundleParser } from "../integration/bundle/bundle-parser.js";
 import { BundleTranspiler } from "../integration/bundle/bundle-transpiler.js";
 
+/** Exit with a message on stderr. TypeScript sees `never` return so flow analysis works. */
+function fatal(message: string, code = 1): never {
+  process.stderr.write(message);
+  process.exit(code);
+}
+
 // ── Argument helpers ────────────────────────────────────────
 
 const args = process.argv.slice(2);
@@ -74,17 +80,15 @@ Examples:
 function handleTranspile(): void {
   const inputPath = args[1];
   if (!inputPath) {
-    process.stderr.write("Error: No input file specified.\n\n");
     printHelp();
-    process.exit(1);
+    fatal("Error: No input file specified.\n");
   }
 
   let source: string;
   try {
     source = readFileSync(inputPath, "utf-8");
   } catch {
-    process.stderr.write(`Error: Cannot read file "${inputPath}".\n`);
-    process.exit(1);
+    fatal(`Error: Cannot read file "${inputPath}".\n`);
   }
 
   const className = getOption("-c", "--class-name");
@@ -122,17 +126,15 @@ function handleTranspile(): void {
 function handleBundle(): void {
   const manifestPath = args[1];
   if (!manifestPath) {
-    process.stderr.write("Error: No manifest file specified.\n\n");
     printHelp();
-    process.exit(1);
+    fatal("Error: No manifest file specified.\n");
   }
 
   let manifestJson: string;
   try {
     manifestJson = readFileSync(manifestPath, "utf-8");
   } catch {
-    process.stderr.write(`Error: Cannot read manifest "${manifestPath}".\n`);
-    process.exit(1);
+    fatal(`Error: Cannot read manifest "${manifestPath}".\n`);
   }
 
   const scriptsDir = getOption("-s", "--scripts-dir") ?? dirname(manifestPath);
@@ -148,10 +150,10 @@ function handleBundle(): void {
   try {
     bundle = parser.parse(manifestJson);
   } catch (err) {
-    process.stderr.write(
-      `Error: Invalid manifest — ${err instanceof Error ? err.message : String(err)}\n`
+    fatal(
+      `Error: Invalid manifest — ${err instanceof Error ? err.message : String(err)}\n`,
+      2
     );
-    process.exit(2);
   }
 
   // Read all script sources from disk

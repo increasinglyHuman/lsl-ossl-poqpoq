@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 
 export default defineConfig({
+  base: "/scripter/",
   resolve: {
     alias: {
       "@poqpoq/types": resolve(__dirname, "src/types"),
