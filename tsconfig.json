@@ -21,7 +21,9 @@
       "@poqpoq/api/*": ["src/api/*"],
       "@poqpoq/runtime/*": ["src/runtime/*"],
       "@poqpoq/transpiler/*": ["src/transpiler/*"],
-      "@poqpoq/editor/*": ["src/editor/*"]
+      "@poqpoq/editor/*": ["src/editor/*"],
+      "@poqpoq/integration/*": ["src/integration/*"],
+      "@poqpoq/protocol/*": ["src/integration/protocol/*"]
     }
   },
   "include": ["src/**/*.ts"],

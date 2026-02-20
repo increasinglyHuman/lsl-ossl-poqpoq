@@ -1,0 +1,69 @@
+{
+  "format_version": "1.0",
+  "scene_name": "Minimal Test Scene",
+  "created": "2026-02-19T12:00:00+00:00",
+  "region": {
+    "size": [256, 256],
+    "water_height": 20.0,
+    "terrain_raise_limit": 100.0,
+    "terrain_lower_limit": -100.0,
+    "maturity_rating": 1,
+    "agent_limit": 100,
+    "object_bonus": 1.0,
+    "flags": {
+      "allow_damage": false,
+      "allow_land_resell": true,
+      "block_fly": false,
+      "block_terraform": false,
+      "disable_scripts": false,
+      "use_estate_sun": true,
+      "fixed_sun": false
+    },
+    "ground_textures": [],
+    "environment": null
+  },
+  "parcels": [],
+  "objects": {
+    "obj-uuid-001": {
+      "name": "Hello Button",
+      "description": "A simple greeting button",
+      "creator_id": "creator-001",
+      "creator_name": "TestCreator",
+      "creator_grid": "http://opensim.example.com",
+      "owner_id": "owner-001",
+      "group_id": "",
+      "creation_date": 1700000000,
+      "permissions": {
+        "base": 647168,
+        "owner": 647168,
+        "group": 0,
+        "everyone": 0,
+        "next_owner": 532480
+      },
+      "flags": "None",
+      "sale_price": 0,
+      "sale_type": 0,
+      "inventory": [
+        {
+          "name": "Hello Script",
+          "type": "script",
+          "asset_uuid": "abc-123"
+        }
+      ]
+    }
+  },
+  "assets": {
+    "abc-123": {
+      "type": "script",
+      "path": "assets/scripts/abc-123.lsl"
+    }
+  },
+  "statistics": {
+    "total_objects": 1,
+    "total_assets": 1,
+    "geometry_assets": 0,
+    "non_geometry_assets": 1,
+    "copied_files": { "script": 1 },
+    "by_type": { "script": 1 }
+  }
+}

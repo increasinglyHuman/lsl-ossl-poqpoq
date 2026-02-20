@@ -16,12 +16,13 @@
   <img src="https://img.shields.io/badge/editor-Monaco-007ACC?logo=visualstudiocode&logoColor=white" alt="Monaco Editor" />
   <img src="https://img.shields.io/badge/compat-LSL_%2F_OSSL-8B5CF6" alt="LSL/OSSL Compatible" />
   <img src="https://img.shields.io/badge/license-MIT-22C55E" alt="MIT License" />
-  <img src="https://img.shields.io/badge/phase-4_of_6-F59E0B" alt="Phase 4 of 6" />
+  <img src="https://img.shields.io/badge/phase-5_of_6-F59E0B" alt="Phase 5 of 6" />
 </p>
 
 <p align="center">
   <a href="LICENSE">MIT License</a> ·
   <a href="docs/adr/ADR-001-language-and-runtime-architecture.md">Architecture (ADR-001)</a> ·
+  <a href="docs/adr/ADR-002-integration-layer-architecture.md">Integration (ADR-002)</a> ·
   <a href="https://poqpoq.com/world/">poqpoq World</a>
 </p>
 
@@ -108,6 +109,10 @@ src/
   runtime/      Script sandbox (Web Worker + SES) [Phase 2]
   transpiler/   LSL → TypeScript transpiler [Phase 3]
   editor/       Monaco-based script editor [Phase 4]
+  integration/  Host integration layer [Phase 5]
+    protocol/   ScriptCommand + ScriptEvent typed contracts
+    bundle/     OAR bundle parser + batch transpiler
+    host/       ScriptHostAdapter + CommandRouter
 examples/       Example scripts
 docs/adr/       Architecture Decision Records
 ```
@@ -120,7 +125,7 @@ docs/adr/       Architecture Decision Records
 | 2. Runtime | **Done** | Worker pool, SES sandbox, event dispatch, timers, inter-script messaging |
 | 3. Transpiler | **Done** | LSL lexer/parser/codegen, type tracker, function resolver |
 | 4. Editor | **Done** | Monaco + IntelliSense + dual TS/LSL mode + full UI shell |
-| 5. Integration | Planned | Babylon.js wiring, OAR import, NEXUS sync |
+| 5. Integration | **In Progress** | Protocol types, OAR bundle pipeline, host adapter ([ADR-002](docs/adr/ADR-002-integration-layer-architecture.md)) |
 | 6. Polish | Planned | Example library, docs, migration guide |
 
 ## The Ecosystem

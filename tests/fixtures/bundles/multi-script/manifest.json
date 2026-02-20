@@ -1,0 +1,167 @@
+{
+  "format_version": "1.0",
+  "scene_name": "Multi-Script Test Scene",
+  "created": "2026-02-19T12:00:00+00:00",
+  "region": {
+    "size": [256, 256],
+    "water_height": 20.0,
+    "terrain_raise_limit": 100.0,
+    "terrain_lower_limit": -100.0,
+    "maturity_rating": 1,
+    "agent_limit": 100,
+    "object_bonus": 1.0,
+    "flags": {
+      "allow_damage": false,
+      "allow_land_resell": true,
+      "block_fly": false,
+      "block_terraform": false,
+      "disable_scripts": false,
+      "use_estate_sun": true,
+      "fixed_sun": false
+    },
+    "ground_textures": [],
+    "environment": null
+  },
+  "parcels": [],
+  "objects": {
+    "obj-door-001": {
+      "name": "Interactive Door",
+      "description": "A door that opens on touch",
+      "creator_id": "creator-001",
+      "creator_name": "Builder",
+      "creator_grid": "",
+      "owner_id": "owner-001",
+      "group_id": "",
+      "creation_date": 1700000000,
+      "permissions": {
+        "base": 647168,
+        "owner": 647168,
+        "group": 0,
+        "everyone": 0,
+        "next_owner": 532480
+      },
+      "flags": "None",
+      "sale_price": 0,
+      "sale_type": 0,
+      "inventory": [
+        {
+          "name": "Door Controller",
+          "type": "script",
+          "asset_uuid": "script-door-001"
+        },
+        {
+          "name": "Door Sound",
+          "type": "sound",
+          "asset_uuid": "sound-001"
+        }
+      ]
+    },
+    "obj-vendor-001": {
+      "name": "Token Vendor",
+      "description": "Sells tokens to visitors",
+      "creator_id": "creator-001",
+      "creator_name": "Builder",
+      "creator_grid": "",
+      "owner_id": "owner-001",
+      "group_id": "",
+      "creation_date": 1700000000,
+      "permissions": {
+        "base": 647168,
+        "owner": 647168,
+        "group": 0,
+        "everyone": 0,
+        "next_owner": 532480
+      },
+      "flags": "None",
+      "sale_price": 0,
+      "sale_type": 0,
+      "inventory": [
+        {
+          "name": "Vendor Script",
+          "type": "script",
+          "asset_uuid": "script-vendor-001"
+        },
+        {
+          "name": "Particle Effect",
+          "type": "script",
+          "asset_uuid": "script-particles-001"
+        },
+        {
+          "name": "Coin Animation",
+          "type": "animation",
+          "asset_uuid": "anim-001"
+        }
+      ]
+    },
+    "obj-sign-001": {
+      "name": "Info Sign",
+      "description": "Displays information on touch",
+      "creator_id": "creator-002",
+      "creator_name": "Decorator",
+      "creator_grid": "",
+      "owner_id": "owner-001",
+      "group_id": "",
+      "creation_date": 1700000000,
+      "permissions": {
+        "base": 647168,
+        "owner": 647168,
+        "group": 0,
+        "everyone": 0,
+        "next_owner": 532480
+      },
+      "flags": "None",
+      "sale_price": 0,
+      "sale_type": 0,
+      "inventory": [
+        {
+          "name": "Sign Display",
+          "type": "script",
+          "asset_uuid": "script-sign-001"
+        },
+        {
+          "name": "Welcome Notecard",
+          "type": "notecard",
+          "asset_uuid": "notecard-001"
+        }
+      ]
+    }
+  },
+  "assets": {
+    "script-door-001": {
+      "type": "script",
+      "path": "assets/scripts/script-door-001.lsl"
+    },
+    "script-vendor-001": {
+      "type": "script",
+      "path": "assets/scripts/script-vendor-001.lsl"
+    },
+    "script-particles-001": {
+      "type": "script",
+      "path": "assets/scripts/script-particles-001.lsl"
+    },
+    "script-sign-001": {
+      "type": "script",
+      "path": "assets/scripts/script-sign-001.lsl"
+    },
+    "sound-001": {
+      "type": "sound",
+      "path": "assets/sounds/sound-001.ogg"
+    },
+    "anim-001": {
+      "type": "animation",
+      "path": "assets/animations/anim-001.bvh"
+    },
+    "notecard-001": {
+      "type": "notecard",
+      "path": "assets/notecards/notecard-001.txt"
+    }
+  },
+  "statistics": {
+    "total_objects": 3,
+    "total_assets": 7,
+    "geometry_assets": 0,
+    "non_geometry_assets": 7,
+    "copied_files": { "script": 4, "sound": 1, "animation": 1, "notecard": 1 },
+    "by_type": { "script": 4, "sound": 1, "animation": 1, "notecard": 1 }
+  }
+}
