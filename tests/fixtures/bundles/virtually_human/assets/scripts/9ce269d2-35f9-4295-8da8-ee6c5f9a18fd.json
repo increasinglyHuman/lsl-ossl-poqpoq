@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "9ce269d2-35f9-4295-8da8-ee6c5f9a18fd",
+  "name": "texture animator v1",
+  "description": "2012-12-07 04:15:18 lsl2 script",
+  "source": "// Scriipt to Animate a Texture - Slide\n// by Robin Sojourner\n\n// This script will make your texture slide smoothly and endlessly\n// across all the faces of a prim.\n\n// The only variable you have to worry about is the rate.\n\n// Set the rate you want to use below. Don't change anything but the number itself.\n// Larger numbers speed up the animation, smaller numbers slow it down.\n// Negative numbers reverse the direction of the slide.\n\nfloat Rate = 0.2;\n\n// If you want to change anything else, you will need to change the script itself.\n\n// Only one texture animation script can be run on a prim at one time.\n// Currently, texture animations will over-ride your texture Scale.\n// Texture animations are client-side.\n\n//***********************************************************************************\n\n// TO CHANGE TO A STEPPED ANIMATION INSTEAD OF SMOOTH\n\n//     Remove the SMOOTH flag, along with one of the | characters. \"(ANIM_ON | LOOP,\"\n\n// TO RUN THE ANIMATION ON ONLY ONE SIDE OF THE PRIM\n\n//     Change the ALL_SIDES to the face number of the side you want to animate.\n\n// For anything else, see the LSL WIKI, or ask a friend who knows how to script.\n\n// **********************************************************************************\n// **********************************************************************************\n\ndefault \n{ \n    state_entry() \n    { \n        llSetTextureAnim(ANIM_ON | SMOOTH | LOOP, ALL_SIDES,0,0,0.0, 1,Rate);\n    } \n}\n",
+  "creator": {
+    "name": "Minetheree.Athanasios @hg.metro.land:80",
+    "uuid": "7734623f-6ca8-4116-9f3d-89aee878a11b",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "danceball/chimera female"
+}

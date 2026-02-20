@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "b10b058e-5c7f-478a-87a9-9b2497b9f280",
+  "name": "flame",
+  "description": "2013-07-21 06:42:39 lsl2 script",
+  "source": "integer glow = TRUE;\ninteger bounce = FALSE;\ninteger interpColor = TRUE;\ninteger interpSize = TRUE;\ninteger wind = TRUE;\ninteger followSource = FALSE;\ninteger followVel = TRUE;\n\ninteger pattern = PSYS_SRC_PATTERN_EXPLODE;\n\nkey target = \"\";\n\nfloat age = 1.5;\nfloat maxSpeed = 0.1;\nfloat minSpeed = 0.01;\nstring texture;\nfloat startAlpha = 0.3;\nfloat endAlpha = 1.0;\nvector startColor = <.8,.7,.4>;\nvector endColor = <0.5,0.0,0.5>;\nvector startSize = <.3,.3,0>;\nvector endSize = <.01,.01,0>;\nvector push = <0,0,1>;\n\nfloat rate = 0.05;\nfloat radius = 0.03;\ninteger count = 23;\nfloat outerAngle = 0.0;\nfloat innerAngle = 0.35;\nvector omega = <0,0,0>;\nfloat life = 0;\n\ninteger flags;\n\nupdateParticles() {\n    flags = 0;\n    if (target == \"owner\") target = llGetOwner();\n    if (target == \"self\") target = llGetKey();\n    if (glow) flags = flags | PSYS_PART_EMISSIVE_MASK;\n    if (bounce) flags = flags | PSYS_PART_BOUNCE_MASK;\n    if (interpColor) flags = flags | PSYS_PART_INTERP_COLOR_MASK;\n    if (interpSize) flags = flags | PSYS_PART_INTERP_SCALE_MASK;\n    if (wind) flags = flags | PSYS_PART_WIND_MASK;\n    if (followSource) flags = flags | PSYS_PART_FOLLOW_SRC_MASK;\n    if (followVel) flags = flags | PSYS_PART_FOLLOW_VELOCITY_MASK;\n    if (target != \"\") flags = flags | PSYS_PART_TARGET_POS_MASK;\n\n    llParticleSystem([  PSYS_PART_MAX_AGE,age,\n        PSYS_PART_FLAGS,flags,\n        PSYS_PART_START_COLOR, startColor,\n        PSYS_PART_END_COLOR, endColor,\n        PSYS_PART_START_SCALE,startSize,\n        PSYS_PART_END_SCALE,endSize,\n        PSYS_SRC_PATTERN, pattern,\n        PSYS_SRC_BURST_RATE,rate,\n        PSYS_SRC_ACCEL, push,\n        PSYS_SRC_BURST_PART_COUNT,count,\n        PSYS_SRC_BURST_RADIUS,radius,\n        PSYS_SRC_BURST_SPEED_MIN,minSpeed,\n        PSYS_SRC_BURST_SPEED_MAX,maxSpeed,\n        PSYS_SRC_TARGET_KEY,target,\n        PSYS_SRC_INNERANGLE,innerAngle,\n        PSYS_SRC_OUTERANGLE,outerAngle,\n        PSYS_SRC_OMEGA, omega,\n        PSYS_SRC_MAX_AGE, life,\n        PSYS_SRC_TEXTURE, texture,\n        PSYS_PART_START_ALPHA, startAlpha,\n        PSYS_PART_END_ALPHA, endAlpha\n            ]);\n}\n\ndefault {\n    state_entry() {\n        updateParticles();\n    }\n}// END //\n\n\n",
+  "creator": {
+    "name": "Allen Partridge",
+    "uuid": "fb65c818-b6e2-4367-8f65-a069ff0443bf",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 2147483647,
+    "current": 2147483647,
+    "next": 532480,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "Primitive"
+}

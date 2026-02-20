@@ -303,6 +303,13 @@ export class Parser {
   }
 
   private parseStatement(): Statement {
+    // Empty statement (bare semicolons — valid in LSL, common in OAR exports)
+    if (this.check(TokenType.Semicolon)) {
+      const loc = this.current().loc;
+      this.advance();
+      return { type: "EmptyStatement", loc };
+    }
+
     // Block
     if (this.check(TokenType.LeftBrace)) {
       return this.parseBlock();

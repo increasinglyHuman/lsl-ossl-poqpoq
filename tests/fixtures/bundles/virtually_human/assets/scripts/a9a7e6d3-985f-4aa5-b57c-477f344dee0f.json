@@ -1,0 +1,14 @@
+{
+  "type": "script",
+  "uuid": "a9a7e6d3-985f-4aa5-b57c-477f344dee0f",
+  "name": "a9a7e6d3-985f-4aa5-b57c-477f344dee0f_script",
+  "description": "",
+  "source": "string gWinMessage = \"Wow, you're the big winner!\";\ninteger pFlag = 0;\n\ndefault\n{\n    on_rez(integer start_param)\n    {\n        llSleep(1);\n        if (start_param == 1)\n            {\n                pFlag = 1;\n            //}else{\n              //  {\n                 //   vector xyz_angles = <180,0.0,0>; // This is to define a 1 degree change\n                 //   vector angles_in_radians = xyz_angles*DEG_TO_RAD; // Change to Radians\n                 //   rotation xyzq = llEuler2Rot(angles_in_radians); // Change to a Rotation\n                 //   llSetRot(llGetRot()* xyzq); //Do the Rotation...\n             //   }\n\n            }\n    }\n    \n    state_entry()\n    {\n        llSetPrimitiveParams([PRIM_TEMP_ON_REZ, TRUE]);\n    llSay(0, gWinMessage);\n    llSetTimerEvent(10.0);\n    \n    \n    }\n    \n    timer()\n    {\n        if (pFlag == 1)\n        {\n            llDie();\n        }else{\n            llSetTimerEvent(0.0);\n        }\n    }\n\n}\n\n\n",
+  "creator": {
+    "name": "",
+    "uuid": "",
+    "grid": ""
+  },
+  "permissions": {},
+  "object_name": ""
+}

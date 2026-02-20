@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "a46a4d9b-e519-4485-a80c-3477e24adfba",
+  "name": "slow rotation",
+  "description": "2012-12-07 13:58:06 lsl2 script",
+  "source": "//slow rotation\n\ndefault\n{\nstate_entry()\n{\nllTargetOmega(<0,0,1>,PI/30,0.010);\n}\n\n}",
+  "creator": {
+    "name": "Minetheree.Athanasios @hg.metro.land:80",
+    "uuid": "7734623f-6ca8-4116-9f3d-89aee878a11b",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "danceball/chimera female"
+}

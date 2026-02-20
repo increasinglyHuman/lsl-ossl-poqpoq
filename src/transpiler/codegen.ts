@@ -164,6 +164,8 @@ export class CodeGenerator {
 
   private statementCallsAsync(stmt: Statement): boolean {
     switch (stmt.type) {
+      case "EmptyStatement":
+        return false;
       case "ExpressionStatement":
         return this.exprCallsAsync(stmt.expression);
       case "IfStatement":
@@ -224,6 +226,8 @@ export class CodeGenerator {
 
   private statementCallsUserAsync(stmt: Statement): boolean {
     switch (stmt.type) {
+      case "EmptyStatement":
+        return false;
       case "ExpressionStatement":
         return this.exprCallsUserAsync(stmt.expression);
       case "IfStatement":
@@ -283,6 +287,8 @@ export class CodeGenerator {
 
   private statementUsesDetected(stmt: Statement): boolean {
     switch (stmt.type) {
+      case "EmptyStatement":
+        return false;
       case "ExpressionStatement":
         return this.exprUsesDetected(stmt.expression);
       case "IfStatement":
@@ -402,6 +408,8 @@ export class CodeGenerator {
 
     const walkStmt = (stmt: Statement): void => {
       switch (stmt.type) {
+        case "EmptyStatement":
+          break;
         case "ExpressionStatement":
           walkExpr(stmt.expression);
           break;
@@ -719,6 +727,9 @@ function lslInsertString(s: string, pos: number, insert: string): string {
 
       case "ExpressionStatement":
         return `${ind}${this.emitExpression(stmt.expression)};`;
+
+      case "EmptyStatement":
+        return "";
 
       case "IfStatement":
         return this.emitIf(stmt, level);

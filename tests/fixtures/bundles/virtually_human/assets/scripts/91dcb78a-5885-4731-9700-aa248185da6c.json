@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "91dcb78a-5885-4731-9700-aa248185da6c",
+  "name": "effinjayURL",
+  "description": "2013-08-10 08:28:46 lsl2 script",
+  "source": "default\n{\n    touch_start(integer num_detected)\n    {\n        key id = llDetectedKey(0);\n        string info = \"Visit Effinjay on the Web\";\n        string url = \"http://www.effinjay.com\";\n        llLoadURL(id, info, url);\n    }\n}\n",
+  "creator": {
+    "name": "Allen Partridge",
+    "uuid": "fb65c818-b6e2-4367-8f65-a069ff0443bf",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 2147483647,
+    "current": 2147483647,
+    "next": 532480,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "Cube.001"
+}

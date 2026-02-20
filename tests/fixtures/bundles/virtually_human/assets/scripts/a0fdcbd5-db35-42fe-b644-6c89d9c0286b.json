@@ -1,0 +1,14 @@
+{
+  "type": "script",
+  "uuid": "a0fdcbd5-db35-42fe-b644-6c89d9c0286b",
+  "name": "a0fdcbd5-db35-42fe-b644-6c89d9c0286b_script",
+  "description": "",
+  "source": "//----------------- PRIVATE -----------------------------\nstring left(string src, string divider) {\n    integer index                       = llSubStringIndex( src, divider );\n    if(~index)\n    {\n        return llDeleteSubString( src, index + llStringLength(divider)-1, -1);\n    }\n    return src;\n}\n\nstring right(string src, string divider) {\n    integer index                       = llSubStringIndex( src, divider );\n    string tString                      = \"\";\n    if (~index)\n    {\n        return llDeleteSubString( src, 0, index + llStringLength(divider) - 1);\n    }\n    return tString;\n}\n\ndefault\n{\n    state_entry()\n    {\n        llListen(3720, \"\", \"\", \"\");\n    }\n\n    listen(integer channel, string name, key id, string mes)\n    {\n        string tMyName = llGetObjectName();\n        string tLeft = left(mes, \":\");\n        string tRight = right(mes, \":\");\n        \n        if (llGetOwner() == (key)tLeft)\n            { \n            //llSleep(1);\n            integer tVeritas = 0;\n            tVeritas = (tMyName == tRight);\n            if (tVeritas == 1)\n                {\n                    llSay(3721, tLeft + \":\" + (string)llGetAttached());\n                }\n            }\n    }\n}\n",
+  "creator": {
+    "name": "",
+    "uuid": "",
+    "grid": ""
+  },
+  "permissions": {},
+  "object_name": ""
+}

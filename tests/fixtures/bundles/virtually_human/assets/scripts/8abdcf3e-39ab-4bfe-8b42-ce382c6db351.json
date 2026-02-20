@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "8abdcf3e-39ab-4bfe-8b42-ce382c6db351",
+  "name": "rot",
+  "description": "2011-12-21 21:24:01 lsl2 script",
+  "source": "default\n{\n    state_entry()\n    {\n        llTargetOmega(<0.0,0.0,1.0>,-0.25,1.0);\n    }\n}",
+  "creator": {
+    "name": "UnknownUMM2 1a0bcc1c-3450-f0e8-6478-6a195fc98b9b",
+    "uuid": "1a0bcc1c-3450-f0e8-6478-6a195fc98b9b",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 32768,
+    "group": 0
+  },
+  "object_name": "Primitive"
+}

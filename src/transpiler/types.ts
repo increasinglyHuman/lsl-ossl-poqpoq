@@ -191,6 +191,7 @@ export interface VariableDeclaration extends BaseNode {
 export type Statement =
   | VariableDeclaration
   | ExpressionStatement
+  | EmptyStatement
   | IfStatement
   | ForStatement
   | WhileStatement
@@ -204,6 +205,10 @@ export type Statement =
 export interface ExpressionStatement extends BaseNode {
   type: "ExpressionStatement";
   expression: Expression;
+}
+
+export interface EmptyStatement extends BaseNode {
+  type: "EmptyStatement";
 }
 
 export interface IfStatement extends BaseNode {

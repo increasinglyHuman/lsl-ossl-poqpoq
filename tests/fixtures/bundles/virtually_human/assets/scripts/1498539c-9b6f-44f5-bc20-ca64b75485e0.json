@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "1498539c-9b6f-44f5-bc20-ca64b75485e0",
+  "name": "objectGiver",
+  "description": "2013-07-01 19:13:03 lsl2 script",
+  "source": "//  THIS IS NOT A VENDING SCRIPT.  It gives items away, it does NOT SELL THEM. \n\ninteger owneronly = 0;\nkey owner;\n\ndefault\n{\n    state_entry()\n    {\n        owner = llGetOwner();        \n    }\n\n    touch_start(integer total_number)\n    {\n        integer i;\n        for (i=0;i<total_number;i++)\n        {\n            key target = llDetectedKey(i);\n        \n            if ( (target != owner) && (owneronly == 1) )  // person clicking isn't owner and owneronly is set;\n            {\n                llInstantMessage(target,\"Sorry, only the owner is allowed to get my contents.\");\n                return;\n            }\n            list inventory_types = [INVENTORY_BODYPART,INVENTORY_CLOTHING,INVENTORY_LANDMARK,INVENTORY_NOTECARD,INVENTORY_OBJECT,INVENTORY_SCRIPT,INVENTORY_SOUND,INVENTORY_TEXTURE];\n            integer inventory_count = llGetListLength(inventory_types);\n            integer j;\n            integer k;\n            integer type;\n            integer typecount;\n            string myname = llGetScriptName();\n            string objectname;\n\n            for (j=0; j<inventory_count;j++)\n            {\n                type = llList2Integer(inventory_types,j); // get the next inventory type from the list\n                typecount = llGetInventoryNumber(type);  // how many of that kind of inventory is in the box?\n                if (typecount > 0)\n                {\n                    for (k=0; k<typecount;k++)\n                    {\n                        objectname = llGetInventoryName(type,k);\n                        if (objectname != myname)  // don't give self out so the user doesn't get fifty thousand copies.\n                        {\n                            llGiveInventory(target,objectname);\n                        }\n                    }\n                }            \n            }\n        }\n    }\n}\n",
+  "creator": {
+    "name": "Allen Partridge",
+    "uuid": "fb65c818-b6e2-4367-8f65-a069ff0443bf",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 2147483647,
+    "current": 2147483647,
+    "next": 532480,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "DraftingStool"
+}

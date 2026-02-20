@@ -1,0 +1,14 @@
+{
+  "type": "script",
+  "uuid": "72e561d0-cdab-4a95-a47a-06e87583f362",
+  "name": "72e561d0-cdab-4a95-a47a-06e87583f362_script",
+  "description": "",
+  "source": "//start_unprocessed_text\n/*default\n{ \n    state_entry() {\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n    on_rez(integer start_param) {\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n    run_time_permissions(integer perm)\n    {\n        if (perm & PERMISSION_TRIGGER_ANIMATION)\n        {\n            llStopAnimation(\"KimaAnkleLock\");\n            llStartAnimation(\"KimaAnkleLock\");\n            llSetTimerEvent(0.1);\n        }\n    }\n    timer() {\n        llSetTimerEvent(0);\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n}*/\n//end_unprocessed_text\n//nfo_preprocessor_version 0\n//program_version Phoenix Firestorm-Release v4.4.2.34167 - Joshua Kimagawa\n//mono\n\n\n \ndefault\n{ \n    state_entry() {\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n    on_rez(integer start_param) {\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n    run_time_permissions(integer perm)\n    {\n        if (perm & PERMISSION_TRIGGER_ANIMATION)\n        {\n            llStopAnimation(\"KimaAnkleLock\");\n            llStartAnimation(\"KimaAnkleLock\");\n            llSetTimerEvent(0.1);\n        }\n    }\n    timer() {\n        llSetTimerEvent(0);\n        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);\n    }\n}\n",
+  "creator": {
+    "name": "",
+    "uuid": "",
+    "grid": ""
+  },
+  "permissions": {},
+  "object_name": ""
+}

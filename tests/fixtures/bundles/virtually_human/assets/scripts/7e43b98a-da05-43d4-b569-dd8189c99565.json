@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "7e43b98a-da05-43d4-b569-dd8189c99565",
+  "name": "sync-F-Cherished",
+  "description": "2011-11-17 16:21:50 lsl2 script",
+  "source": "//First value is the waiting animation, second and else is for motion. The order is respected!\n//Example: list animation = [\"wait\", \"motion1\", \"motion2\", \"motionN\"];\nlist ANIMS = [\"magicmoment-f-wait\", \"cherished-f\"];\n\nstring  BUTTON      =   \"DANCE\";    // text of the pie menu\nstring  TITLE       =   \"CHERISHED-F\";     // floating text\nfloat   TIMEOUT     =   30.0;      // time to play each anim listed \nvector  ROTATION    =   <0,0,0>;   // euler in degrees (like the edit box)\nvector  OFFSET      =   <0,0,0.5>; // how far the person sits from the ball. ( <X,Y,Z> )\n\n//do not edit after this line if you are not confortable with programmin languages\n\nstring  BALL = \"FEM\"; integer RUN  = TRUE; integer MAL; integer FEM; integer INDEX;\n\nshow() { RUN = TRUE; llSetText(TITLE, <1.0,1.0,1.0> ,1.0); llSetAlpha(1.0, ALL_SIDES); }\n\nhide() { RUN = FALSE; llSetText(\"\", ZERO_VECTOR, FALSE); llSetAlpha(0.0, ALL_SIDES); }\n\nstopAnims() {\n    integer i; list anims = llGetAnimationList(llGetPermissionsKey());            \n    for (i=0;i<llGetListLength(anims);++i) llStopAnimation(llList2Key(anims, i));\n}\n    \ndefault {\n    state_entry() {\n        llSitTarget(OFFSET, llEuler2Rot(ROTATION * DEG_TO_RAD));\n        if (llAvatarOnSitTarget()) { llUnSit(llAvatarOnSitTarget()); }\n        llSetSitText(BUTTON); if (RUN) show(); else hide(); MAL = FALSE; FEM = FALSE;\n    }\n\n    link_message(integer sender_num, integer num, string str, key id) {\n        if ((string)id==\"BALL\") {\n            if (str==\"MAL\") { MAL=num; } else if (str==\"FEM\") { FEM=num; }\n            if (FEM && MAL) { llMessageLinked(LINK_SET, TRUE, \"ANIMS\", NULL_KEY); }\n            else if (FEM || MAL) { llMessageLinked(LINK_SET, FALSE, \"ANIMS\", NULL_KEY); }\n            else { llResetScript(); }\n        }\n        else if (str==\"ANIMS\") {\n            if (num) { INDEX = 0; llSetTimerEvent(0.01); }\n            else { llSetTimerEvent(0.0); if (llAvatarOnSitTarget()) { stopAnims(); llStartAnimation(llList2String(ANIMS,0)); } }\n        }\n    }\n\n    timer() { if (++INDEX==llGetListLength(ANIMS)) { INDEX=TRUE; } llStartAnimation(llList2String(ANIMS,INDEX)); llSetTimerEvent(TIMEOUT); }\n    \n    changed(integer change) {\n        if(change & CHANGED_LINK) { key avatar = llAvatarOnSitTarget();\n            if (avatar!=NULL_KEY) {\n                if(llGetPermissionsKey() != avatar) { llRequestPermissions(avatar, PERMISSION_TRIGGER_ANIMATION); }\n                hide(); llMessageLinked(LINK_SET, TRUE, BALL, (key)\"BALL\");\n            }\n            else if ((llGetPermissionsKey()!=NULL_KEY) && (llGetPermissions() & PERMISSION_TRIGGER_ANIMATION)) {\n                show(); llMessageLinked(LINK_SET, FALSE, BALL, (key)\"BALL\"); stopAnims();\n    }    } if (change & CHANGED_INVENTORY) { llResetScript(); }    }\n\n    run_time_permissions(integer perm) {\n        key avatar = llAvatarOnSitTarget();\n        if(perm & PERMISSION_TRIGGER_ANIMATION && llKey2Name(avatar) != \"\" && avatar == llGetPermissionsKey()) {\n            stopAnims();\n            llStartAnimation(llList2String(ANIMS,0));\n            hide();\n    }   }   }\n\n",
+  "creator": {
+    "name": "Linda.Kellie @hg.osgrid.org:80",
+    "uuid": "0a3e1950-33c2-4d98-9c89-f017aef3c4e4",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "Cherished-Syncronized Dance"
+}

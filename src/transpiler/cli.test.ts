@@ -15,12 +15,13 @@ const BUNDLES_MINIMAL = join(FIXTURES, "bundles/minimal");
 const BUNDLES_MULTI = join(FIXTURES, "bundles/multi-script");
 const TMP = resolve(ROOT, "tests/.tmp-cli");
 
-function run(argStr: string) {
+function run(argStr: string, maxBuffer = 1024 * 1024) {
   const args = argStr ? argStr.split(/\s+/) : [];
   const result = spawnSync("npx", ["tsx", CLI, ...args], {
     encoding: "utf-8",
     cwd: ROOT,
     timeout: 15000,
+    maxBuffer,
   });
   return {
     stdout: result.stdout ?? "",
@@ -153,6 +154,19 @@ describe("bundle", () => {
     expect(exitCode).toBe(1);
     const result = JSON.parse(stdout);
     expect(result.failureCount).toBeGreaterThan(0);
+  });
+
+  it("processes virtuallyHuman 60-script OAR bundle (JSON wrappers)", () => {
+    const vhDir = join(FIXTURES, "bundles/virtually_human");
+    const { stdout, exitCode } = run(
+      `bundle ${join(vhDir, "manifest.json")} -s ${vhDir} --json`,
+      50 * 1024 * 1024 // 50MB — large bundle produces ~20MB JSON
+    );
+    expect(exitCode).toBe(0);
+    const result = JSON.parse(stdout);
+    expect(result.successCount).toBe(102); // 60 unique scripts, 102 bindings
+    expect(result.failureCount).toBe(0);
+    expect(result.scripts.length).toBe(102);
   });
 
   it("exits 2 for invalid manifest JSON", () => {

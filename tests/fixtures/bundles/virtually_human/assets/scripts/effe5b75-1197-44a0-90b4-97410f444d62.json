@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "effe5b75-1197-44a0-90b4-97410f444d62",
+  "name": "New Script",
+  "description": "2013-01-13 16:15:04 lsl2 script",
+  "source": "//This script deletes ALL NPCs in a region when prim is touched by owner\nkey ownerKey;\ndefault\n{\n    state_entry() {\n        ownerKey = llGetOwner();\n    }\n    touch_start(integer number)\n    {\n        key toucher = llDetectedKey(0);\n        if(toucher == ownerKey) { \n\n            list avatars = llList2ListStrided(osGetAvatarList(), 0, -1, 3);\n            integer i;\n            llSay(0,\"NPC Removal: No avatars will be harmed or removed in this process!\");\n            for (i=0; i<llGetListLength(avatars); i++)\n            {\n                string target = llList2String(avatars, i);\n                osNpcRemove(target);\n                llSay(0,\"NPC Removal: Target \"+target);\n            }\n        }\n    }\n}",
+  "creator": {
+    "name": "Ohn Lang",
+    "uuid": "19022ba4-7115-402f-82d3-32e6821cf3aa",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "REMOVE ALL NPC's"
+}

@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "bc01d717-85a3-4947-88cd-a7e949cad77f",
+  "name": "botScriptA",
+  "description": "2013-06-30 23:38:49 lsl2 script",
+  "source": "// AXIS_* constants, represent the unit vector 1 unit on the specified axis.\n vector AXIS_UP = <0,0,1>;\n vector AXIS_LEFT = <0,1,0>;\n vector AXIS_FWD = <1,0,0>;\n integer pFlag = 0;\n \n // getRotToPointAxisAt()\n// Gets the rotation to point the specified axis at the specified position.\n// @param axis The axis to point. Easiest to just use an AXIS_* constant.\n// @param target The target, in region-local coordinates, to point the axis at.\n// @return The rotation necessary to point axis at target.\n// Created by Ope Rand, modifyed by Christopher Omega\nrotation getRotToPointAxisAt(vector axis, vector target) \n{\n    return llGetRot() * llRotBetween(axis * llGetRot(), target - llGetPos());\n}\n\n\n// zero_xy by Strife Onizuka\nrotation zero_xy(rotation a) { \n    vector b = <1,0,0> * a;\n    b.z = 0;\n    return llRotBetween(<1,0,0>,llVecNorm(b));\n} \n\n// Strength and damping are values used to control how llRotLookAt and llLookAt move, these values are tunable.\nfloat strength = 0.01;\nfloat damping = 0.01;\n\ndefault {\n    state_entry() \n    {\n        llSetTimerEvent(0.3); // generate a timer event every 5 second\n    }\n    \n    touch_start(integer total_number)\n    {\n        llInstantMessage(llDetectedKey(0), \" \\n \u27a3 Hello, make yourself at home.\\n \\n You'll find a demo of the game kit coming soon. \\nThere are free tutorials here, in the training center.\\n\\n If you'd like to ask us a question about our services, \\n you can email us at virtuallyHuman@gmail.com \\n or you can instant message Allen Partridge in Kitely.\");\n    }\n    timer() \n    {\n        llSensor(\"\", NULL_KEY, AGENT, 3, PI); // scan for agents/avatars within 10 metres.\n    }\n    sensor(integer total_number) \n    {\n        //integer i;\n        if (pFlag == 0)\n        {\n        pFlag = 1;\n        llWhisper(0, \"Hello \" + llDetectedName(0) + \". Welcome to the building center at Virtually Human Investigations.  You are welcome to rez items in order to practice right here in the building center, but please clean up when you are done.  (Serious abusers will be banned, yes that includes skybox autorezzers etc.)  Auto-Return is set to a short 60 minutes so be sure to save often.\");\n    }\n        integer i;\n        for (i = 0; i < total_number; i++)\n            {\n                //vector target = ((vector)message); // A vector to look at.\n                //vector target = llDetectedPos(i);\n               // vector myPos = llGetPos();\n                llRotLookAt(zero_xy(getRotToPointAxisAt(<1,0,0>, llDetectedPos(0) ) ) ,1,1);\n                //llSetPos(myPos + vector(0,0,0.001);\n             }\n        //string tString = ((string)channel+ name + (string)id + message);\n    }\n    no_sensor()\n    {\n        pFlag = 0;\n    }\n}\n\n",
+  "creator": {
+    "name": "Allen Partridge",
+    "uuid": "fb65c818-b6e2-4367-8f65-a069ff0443bf",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 2147483647,
+    "current": 2147483647,
+    "next": 532480,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": ":BOT::"
+}

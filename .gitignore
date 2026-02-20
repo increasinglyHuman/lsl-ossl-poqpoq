@@ -9,3 +9,10 @@ coverage/
 *.log
 .DS_Store
 Thumbs.db
+
+# OutWorldz test corpus (1,900+ scripts — too large for git)
+tests/fixtures/lsl/outworldz/
+
+# CLI temp output
+tests/.tmp-cli/
+dist-app/

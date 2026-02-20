@@ -118,7 +118,7 @@ function handleTranspile(): void {
     }
   }
 
-  process.exit(result.success ? 0 : 1);
+  process.exitCode = result.success ? 0 : 1;
 }
 
 // ── bundle command ──────────────────────────────────────────
@@ -157,11 +157,21 @@ function handleBundle(): void {
   }
 
   // Read all script sources from disk
+  // Legacy exports scripts as .json wrappers with a "source" field containing LSL
   const sources = new Map<string, string>();
   for (const script of bundle.scripts) {
     try {
       const fullPath = resolve(scriptsDir, script.assetPath);
-      sources.set(script.assetPath, readFileSync(fullPath, "utf-8"));
+      const raw = readFileSync(fullPath, "utf-8");
+
+      if (script.assetPath.endsWith(".json")) {
+        const wrapper = JSON.parse(raw);
+        if (typeof wrapper.source === "string") {
+          sources.set(script.assetPath, wrapper.source);
+        }
+      } else {
+        sources.set(script.assetPath, raw);
+      }
     } catch {
       // Missing source — BundleTranspiler handles gracefully
     }
@@ -193,7 +203,7 @@ function handleBundle(): void {
     }
   }
 
-  process.exit(result.failureCount > 0 ? 1 : 0);
+  process.exitCode = result.failureCount > 0 ? 1 : 0;
 }
 
 // ── Entry point ─────────────────────────────────────────────

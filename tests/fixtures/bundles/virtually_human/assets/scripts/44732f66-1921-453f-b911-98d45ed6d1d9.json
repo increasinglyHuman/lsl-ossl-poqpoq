@@ -1,0 +1,20 @@
+{
+  "type": "script",
+  "uuid": "44732f66-1921-453f-b911-98d45ed6d1d9",
+  "name": "Magic Anim Script - 1.3",
+  "description": "2009-08-23 13:21:39 lsl2 script",
+  "source": "// This script is licensed under GPL license version 2\n//\n// In short: feel free to redistribute and modify it, as long as\n// any copies of it can be redistributed and modified as well.\n//\n// The official text of the licence is available at\n// http://www.gnu.org/licences/gpl.html\n//\n// (c) The owner of Avatar Whidou Bienstock, 2008, 2003\n// Large portions of this script are by Catherine Pfeffer\n\nstartAnimation()\n{\n    string name = llGetInventoryName(INVENTORY_ANIMATION, 0);\n\n    llStopAnimation(\"sit\");                                 // Stop the default animation\n    llStartAnimation(name);                                 // and start the new one\n}\n\nstopAnimation()\n{\n    string name = llGetInventoryName(INVENTORY_ANIMATION, 0);\n\n    llStopAnimation(name);                                  // Stop the animation\n}\n\ndefault\n{\n    \n    changed(integer change)\n    {\n        if (change & CHANGED_LINK)\n        {\n            if (llGetInventoryNumber(INVENTORY_ANIMATION))  // If there is at least one animation in the inventory\n            {\n                key who = llAvatarOnSitTarget();\n                integer perm = llGetPermissions();\n\n                if (who)                                    // If someone sits down, animate the avatar\n                {\n                    if ( (perm & PERMISSION_TRIGGER_ANIMATION) &&\n                         (who == llGetPermissionsKey())\n                       ) startAnimation();\n                    else\n                        llRequestPermissions(who, PERMISSION_TRIGGER_ANIMATION);\n                }\n                else                                        // If the person stands up and was playing the animation, stop the animation\n                {\n                    if (perm & PERMISSION_TRIGGER_ANIMATION)\n                        stopAnimation();\n                }\n            }\n        }\n    }\n    \n    run_time_permissions(integer perm)\n    {\n        if (perm & PERMISSION_TRIGGER_ANIMATION)            // If the permission is granted, start the animation\n            startAnimation();\n    }\n}\n",
+  "creator": {
+    "name": "UnknownUMM2 01d4550e-6ada-4dee-ba47-e3fc0ae9c032",
+    "uuid": "01d4550e-6ada-4dee-ba47-e3fc0ae9c032",
+    "grid": "http://grid.kitely.com:8002"
+  },
+  "permissions": {
+    "base": 581632,
+    "current": 581632,
+    "next": 581632,
+    "everyone": 0,
+    "group": 0
+  },
+  "object_name": "Primitive"
+}
