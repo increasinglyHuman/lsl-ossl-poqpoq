@@ -248,6 +248,106 @@ export interface RequestPermissionsCommand {
   readonly permissions: number;
 }
 
+// === Media Commands ===
+
+export interface SetMediaCommand {
+  readonly type: "setMedia";
+  readonly objectId: string;
+  readonly face: number;
+  readonly mediaType: "video" | "iframe" | "stream";
+  readonly url: string;
+  readonly options?: {
+    readonly autoplay?: boolean;
+    readonly muted?: boolean;
+    readonly loop?: boolean;
+    readonly width?: number;
+    readonly height?: number;
+  };
+}
+
+export interface StopMediaCommand {
+  readonly type: "stopMedia";
+  readonly objectId: string;
+  readonly face: number;
+}
+
+export interface SetMediaVolumeCommand {
+  readonly type: "setMediaVolume";
+  readonly objectId: string;
+  readonly volume: number;
+}
+
+// === Sensor Commands ===
+
+export interface SensorCommand {
+  readonly type: "sensor";
+  readonly objectId: string;
+  readonly name: string;
+  readonly sensorType: number;
+  readonly range: number;
+  readonly arc: number;
+}
+
+export interface SensorRepeatCommand {
+  readonly type: "sensorRepeat";
+  readonly objectId: string;
+  readonly name: string;
+  readonly sensorType: number;
+  readonly range: number;
+  readonly arc: number;
+  readonly interval: number;
+}
+
+export interface SensorRemoveCommand {
+  readonly type: "sensorRemove";
+}
+
+// === Lifecycle Commands ===
+
+export interface RezObjectCommand {
+  readonly type: "rezObject";
+  readonly objectId: string;
+  readonly inventory: string;
+  readonly position: Vec3;
+  readonly velocity: Vec3;
+  readonly rotation: Quat;
+  readonly startParam: number;
+}
+
+export interface DieCommand {
+  readonly type: "die";
+  readonly objectId: string;
+}
+
+// === NPC Extended Commands ===
+
+export interface NpcLookAtCommand {
+  readonly type: "npcLookAt";
+  readonly npcId: string;
+  readonly position: Vec3;
+}
+
+export interface NpcFollowCommand {
+  readonly type: "npcFollow";
+  readonly npcId: string;
+  readonly targetId: string;
+  readonly distance: number;
+}
+
+export interface NpcPatrolCommand {
+  readonly type: "npcPatrol";
+  readonly npcId: string;
+  readonly waypoints: Vec3[];
+  readonly loop: boolean;
+}
+
+export interface NpcWanderCommand {
+  readonly type: "npcWander";
+  readonly npcId: string;
+  readonly center: Vec3;
+  readonly radius: number;
+}
+
 // === Discriminated Union ===
 
 export type ScriptCommand =
@@ -290,7 +390,23 @@ export type ScriptCommand =
   | NpcPlayAnimationCommand
   | NpcStopAnimationCommand
   // Permissions
-  | RequestPermissionsCommand;
+  | RequestPermissionsCommand
+  // Media
+  | SetMediaCommand
+  | StopMediaCommand
+  | SetMediaVolumeCommand
+  // Sensors
+  | SensorCommand
+  | SensorRepeatCommand
+  | SensorRemoveCommand
+  // Lifecycle
+  | RezObjectCommand
+  | DieCommand
+  // NPC Extended
+  | NpcLookAtCommand
+  | NpcFollowCommand
+  | NpcPatrolCommand
+  | NpcWanderCommand;
 
 // === Envelope (adds routing metadata) ===
 

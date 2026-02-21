@@ -49,3 +49,7 @@ export type {
   LoadBundleResult,
   ObjectScriptStatus,
 } from "./host/index.js";
+
+// Bridge — Reference implementations for host integration
+export { ReferenceBabylonBridge, ReferenceEventForwarder } from "./bridge/index.js";
+export type { HostSystems, SceneLike, MeshLike, EventDispatchFn } from "./bridge/index.js";

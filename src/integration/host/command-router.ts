@@ -194,6 +194,58 @@ export class CommandRouter {
       case "world.requestPermissions":
         return { type: "requestPermissions", agentId: args[0] as string, permissions: args[1] as number };
 
+      // === Media ===
+      case "object.setMedia":
+        return {
+          type: "setMedia",
+          objectId: containerId,
+          face: args[0] as number,
+          mediaType: (args[1] as "video" | "iframe" | "stream") ?? "video",
+          url: args[2] as string,
+          options: args[3] as Record<string, unknown> | undefined,
+        };
+      case "object.stopMedia":
+        return { type: "stopMedia", objectId: containerId, face: args[0] as number };
+      case "object.setMediaVolume":
+        return { type: "setMediaVolume", objectId: containerId, volume: args[0] as number };
+
+      // === Sensors ===
+      case "world.sensor":
+        return {
+          type: "sensor",
+          objectId: containerId,
+          name: args[0] as string,
+          sensorType: args[1] as number,
+          range: args[2] as number,
+          arc: args[3] as number,
+        };
+      case "world.sensorRepeat":
+        return {
+          type: "sensorRepeat",
+          objectId: containerId,
+          name: args[0] as string,
+          sensorType: args[1] as number,
+          range: args[2] as number,
+          arc: args[3] as number,
+          interval: args[4] as number,
+        };
+      case "world.sensorRemove":
+        return { type: "sensorRemove" };
+
+      // === Lifecycle ===
+      case "object.die":
+        return { type: "die", objectId: containerId };
+
+      // === NPC Extended ===
+      case "world.npcLookAt":
+        return { type: "npcLookAt", npcId: args[0] as string, position: args[1] as import("../protocol/script-command.js").Vec3 };
+      case "world.npcFollow":
+        return { type: "npcFollow", npcId: args[0] as string, targetId: args[1] as string, distance: (args[2] as number) ?? 2.0 };
+      case "world.npcPatrol":
+        return { type: "npcPatrol", npcId: args[0] as string, waypoints: args[1] as import("../protocol/script-command.js").Vec3[], loop: (args[2] as boolean) ?? true };
+      case "world.npcWander":
+        return { type: "npcWander", npcId: args[0] as string, center: args[1] as import("../protocol/script-command.js").Vec3, radius: args[2] as number };
+
       // === Built-in methods handled by ScriptManager ===
       // These return null → the caller skips them (handled upstream)
       case "world.setTimer":

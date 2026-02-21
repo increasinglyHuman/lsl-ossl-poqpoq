@@ -20,6 +20,8 @@ export type ScriptEventCallback = (type: ScriptEventType, script: ScriptDocument
 
 const STORAGE_KEY = "poqpoq-editor-scripts";
 const ACTIVE_KEY = "poqpoq-editor-active";
+const VERSION_KEY = "poqpoq-editor-version";
+const STORAGE_VERSION = 2; // Bump to reset stale localStorage
 
 const DEFAULT_LSL = `// Hello World — your first LSL script
 default
@@ -55,6 +57,14 @@ export class EditorScriptManager {
   private listeners: ScriptEventCallback[] = [];
 
   constructor() {
+    // Reset stale localStorage when storage version changes
+    const storedVersion = Number(localStorage.getItem(VERSION_KEY) || "0");
+    if (storedVersion < STORAGE_VERSION) {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(ACTIVE_KEY);
+      localStorage.setItem(VERSION_KEY, String(STORAGE_VERSION));
+    }
+
     this.scripts = this.loadFromStorage();
     this.activeId = this.loadActiveId();
 
@@ -100,9 +110,9 @@ export class EditorScriptManager {
   }
 
   /** Create a new script */
-  create(name: string, language: "lsl" | "typescript"): ScriptDocument {
+  create(name: string, language: "lsl" | "typescript", initialSource?: string): ScriptDocument {
     const id = crypto.randomUUID();
-    const source = language === "lsl" ? "" : DEFAULT_TS;
+    const source = initialSource ?? (language === "lsl" ? "" : DEFAULT_TS);
     const doc: ScriptDocument = {
       id,
       name,
@@ -212,13 +222,8 @@ export class EditorScriptManager {
   }
 
   private createDefaults(): void {
-    const hello = this.create("HelloWorld.lsl", "lsl");
-    hello.source = DEFAULT_LSL;
-    hello.isDirty = false;
-
-    const ts = this.create("MyScript.ts", "typescript");
-    ts.source = DEFAULT_TS;
-    ts.isDirty = false;
+    const hello = this.create("HelloWorld.lsl", "lsl", DEFAULT_LSL);
+    const _ts = this.create("MyScript.ts", "typescript", DEFAULT_TS);
 
     this.activeId = hello.id;
     this.save();
