@@ -97,6 +97,18 @@ export interface PhysicsSystemLike {
   applyForce(objectId: string, force: Vec3Like, local?: boolean): void;
   applyImpulse(objectId: string, impulse: Vec3Like, local?: boolean): void;
   configure(objectId: string, config: Record<string, unknown>): void;
+  // Phase 7D extensions
+  setStatus?(objectId: string, flags: number, value: boolean): void;
+  setDamage?(objectId: string, damage: number): void;
+  pushObject?(targetId: string, impulse: Vec3Like, angularImpulse: Vec3Like, local?: boolean): void;
+  setTorque?(objectId: string, torque: Vec3Like, local?: boolean): void;
+  volumeDetect?(objectId: string, enabled: boolean): void;
+  collisionFilter?(objectId: string, name: string, id: string, accept: boolean): void;
+  setBuoyancy?(objectId: string, buoyancy: number): void;
+  stopMoveToTarget?(objectId: string): void;
+  lookAt?(objectId: string, target: Vec3Like, strength: number, damping: number): void;
+  stopLookAt?(objectId: string): void;
+  setPhysicsShape?(objectId: string, shapeType: number, params: readonly unknown[]): void;
 }
 
 // === Audio ===
@@ -167,6 +179,22 @@ export interface SensorSystemLike {
   sensorRemove(scriptId: string): void;
 }
 
+// === Environment (Terrain / Water) ===
+
+export interface EnvironmentSystemLike {
+  getWaterHeight(position: Vec3Like): number;
+  getGroundNormal(offset: Vec3Like): Vec3Like;
+  getGroundSlope(offset: Vec3Like): Vec3Like;
+  getGroundHeight?(position: Vec3Like): number;
+}
+
+// === Inventory / Rez ===
+
+export interface InventorySystemLike {
+  rez(objectId: string, inventory: string, position: Vec3Like, velocity: Vec3Like, rotation: QuatLike, startParam: number): void;
+  rezAtRoot(objectId: string, inventory: string, position: Vec3Like, velocity: Vec3Like, rotation: QuatLike, startParam: number): void;
+}
+
 // === Media Surface ===
 
 export interface MediaSurfaceLike {
@@ -187,4 +215,6 @@ export interface HostSystems {
   sensor?: SensorSystemLike;
   media?: MediaSurfaceLike;
   textures?: TextureFactoryLike;
+  environment?: EnvironmentSystemLike;
+  inventory?: InventorySystemLike;
 }

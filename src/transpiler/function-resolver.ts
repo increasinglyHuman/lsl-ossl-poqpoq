@@ -948,6 +948,161 @@ const SPECIAL_HANDLERS: Record<string, (args: string[]) => ResolvedFunction> = {
     lslName: "osParseJSON",
     category: "ossl-data",
   }),
+
+  // ── Phase 7D: Physics, Combat & Environment ────────────────
+
+  llSetStatus: (args) => ({
+    kind: "method",
+    template: `this.object.setStatus(${args[0]}, ${args[1]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llSetStatus",
+    category: "physics",
+  }),
+
+  llGetStatus: (args) => ({
+    kind: "method",
+    template: `this.object.getStatus(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetStatus",
+    category: "physics",
+  }),
+
+  llSetDamage: (args) => ({
+    kind: "method",
+    template: `this.object.setDamage(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llSetDamage",
+    category: "combat",
+  }),
+
+  llRezObject: (args) => ({
+    kind: "method",
+    template: `this.object.rez(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llRezObject",
+    category: "object",
+  }),
+
+  llRezAtRoot: (args) => ({
+    kind: "method",
+    template: `this.object.rezAtRoot(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llRezAtRoot",
+    category: "object",
+  }),
+
+  llPushObject: (args) => ({
+    kind: "method",
+    template: `this.world.pushObject(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llPushObject",
+    category: "combat",
+  }),
+
+  llStopMoveToTarget: () => ({
+    kind: "method",
+    template: `this.object.stopMoveToTarget()`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llStopMoveToTarget",
+    category: "physics",
+  }),
+
+  llSetTorque: (args) => ({
+    kind: "method",
+    template: `this.object.setTorque(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llSetTorque",
+    category: "physics",
+  }),
+
+  llVolumeDetect: (args) => ({
+    kind: "method",
+    template: `this.object.volumeDetect(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llVolumeDetect",
+    category: "physics",
+  }),
+
+  llCollisionFilter: (args) => ({
+    kind: "method",
+    template: `this.object.collisionFilter(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llCollisionFilter",
+    category: "physics",
+  }),
+
+  llSetBuoyancy: (args) => ({
+    kind: "method",
+    template: `this.object.setBuoyancy(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llSetBuoyancy",
+    category: "physics",
+  }),
+
+  llWater: (args) => ({
+    kind: "method",
+    template: `this.world.getWaterHeight(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llWater",
+    category: "environment",
+  }),
+
+  llGroundNormal: (args) => ({
+    kind: "method",
+    template: `this.world.getGroundNormal(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGroundNormal",
+    category: "environment",
+  }),
+
+  llGroundSlope: (args) => ({
+    kind: "method",
+    template: `this.world.getGroundSlope(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGroundSlope",
+    category: "environment",
+  }),
+
+  llSetPhysicsShapeType: (args) => ({
+    kind: "method",
+    template: `this.object.setPhysicsShape(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llSetPhysicsShapeType",
+    category: "physics",
+  }),
+
+  llLookAt: (args) => ({
+    kind: "method",
+    template: `this.object.lookAt(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llLookAt",
+    category: "physics",
+  }),
+
+  llStopLookAt: () => ({
+    kind: "method",
+    template: `this.object.stopLookAt()`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llStopLookAt",
+    category: "physics",
+  }),
 };
 
 // ============================================================

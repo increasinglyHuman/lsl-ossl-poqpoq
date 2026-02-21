@@ -466,6 +466,147 @@ describe("CommandRouter", () => {
     });
   });
 
+  describe("Phase 7D: Physics extended commands", () => {
+    it("routes object.setStatus", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.setStatus", [0x01, true]);
+      expect(received[0].type).toBe("setStatus");
+      if (received[0].type === "setStatus") {
+        expect(received[0].flags).toBe(0x01);
+        expect(received[0].value).toBe(true);
+      }
+    });
+
+    it("routes object.setDamage", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.setDamage", [100]);
+      expect(received[0].type).toBe("setDamage");
+      if (received[0].type === "setDamage") {
+        expect(received[0].damage).toBe(100);
+      }
+    });
+
+    it("routes world.pushObject", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.pushObject", ["target-1", { x: 0, y: 10, z: 0 }, { x: 0, y: 0, z: 0 }, false]);
+      expect(received[0].type).toBe("pushObject");
+      if (received[0].type === "pushObject") {
+        expect(received[0].targetId).toBe("target-1");
+        expect(received[0].impulse).toEqual({ x: 0, y: 10, z: 0 });
+      }
+    });
+
+    it("routes object.setTorque", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.setTorque", [{ x: 0, y: 5, z: 0 }, true]);
+      expect(received[0].type).toBe("setTorque");
+      if (received[0].type === "setTorque") {
+        expect(received[0].local).toBe(true);
+      }
+    });
+
+    it("routes object.volumeDetect", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.volumeDetect", [true]);
+      expect(received[0].type).toBe("volumeDetect");
+    });
+
+    it("routes object.collisionFilter", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.collisionFilter", ["enemy", "uuid-1", true]);
+      expect(received[0].type).toBe("collisionFilter");
+      if (received[0].type === "collisionFilter") {
+        expect(received[0].name).toBe("enemy");
+        expect(received[0].accept).toBe(true);
+      }
+    });
+
+    it("routes object.setBuoyancy", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.setBuoyancy", [1.0]);
+      expect(received[0].type).toBe("setBuoyancy");
+      if (received[0].type === "setBuoyancy") {
+        expect(received[0].buoyancy).toBe(1.0);
+      }
+    });
+
+    it("routes object.stopMoveToTarget", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.stopMoveToTarget", []);
+      expect(received[0].type).toBe("stopMoveToTarget");
+    });
+
+    it("routes object.lookAt", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.lookAt", [{ x: 10, y: 0, z: 10 }, 1.0, 0.5]);
+      expect(received[0].type).toBe("lookAt");
+      if (received[0].type === "lookAt") {
+        expect(received[0].strength).toBe(1.0);
+        expect(received[0].damping).toBe(0.5);
+      }
+    });
+
+    it("routes object.stopLookAt", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.stopLookAt", []);
+      expect(received[0].type).toBe("stopLookAt");
+    });
+
+    it("routes object.setPhysicsShape", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.setPhysicsShape", [2, []]);
+      expect(received[0].type).toBe("setPhysicsShape");
+      if (received[0].type === "setPhysicsShape") {
+        expect(received[0].shapeType).toBe(2);
+      }
+    });
+
+    it("routes object.rez", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.rez", ["bullet", { x: 1, y: 2, z: 3 }, { x: 0, y: 0, z: 10 }, { x: 0, y: 0, z: 0, s: 1 }, 0]);
+      expect(received[0].type).toBe("rezObject");
+      if (received[0].type === "rezObject") {
+        expect(received[0].inventory).toBe("bullet");
+      }
+    });
+
+    it("routes object.rezAtRoot", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "object.rezAtRoot", ["tower", { x: 5, y: 0, z: 5 }, { x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0, s: 1 }, 42]);
+      expect(received[0].type).toBe("rezAtRoot");
+      if (received[0].type === "rezAtRoot") {
+        expect(received[0].inventory).toBe("tower");
+        expect(received[0].startParam).toBe(42);
+      }
+    });
+  });
+
   describe("HTTP and permissions", () => {
     it("routes world.httpRequest", async () => {
       const router = createRouter();

@@ -25,6 +25,10 @@ export {
 export { PatrolRunner, WanderRunner, FollowRunner, GuardRunner, SteeringPresets } from "./npc-behavior.js";
 export type { BehaviorState, BehaviorWaypoint } from "./npc-behavior.js";
 
+// Combat presets (declarative config, engine-independent)
+export { CombatPresets } from "./combat.js";
+export type { ProjectileConfig, ExplosionConfig, MeleeConfig, TurretConfig } from "./combat.js";
+
 // Engine structural interfaces (for advanced consumers writing custom bridges)
 export type {
   SceneLike,
@@ -45,5 +49,7 @@ export type {
   PermissionSystemLike,
   SensorSystemLike,
   MediaSurfaceLike,
+  EnvironmentSystemLike,
+  InventorySystemLike,
   HostSystems,
 } from "./engine-types.js";

@@ -16,8 +16,8 @@
   <img src="https://img.shields.io/badge/editor-Monaco-007ACC?logo=visualstudiocode&logoColor=white" alt="Monaco Editor" />
   <img src="https://img.shields.io/badge/compat-LSL_%2F_OSSL-8B5CF6" alt="LSL/OSSL Compatible" />
   <img src="https://img.shields.io/badge/license-MIT-22C55E" alt="MIT License" />
-  <img src="https://img.shields.io/badge/tests-713_passing-22C55E" alt="713 Tests Passing" />
-  <img src="https://img.shields.io/badge/phase-7C_complete-3B82F6" alt="Phase 7C Complete" />
+  <img src="https://img.shields.io/badge/tests-770_passing-22C55E" alt="770 Tests Passing" />
+  <img src="https://img.shields.io/badge/phase-7D_complete-3B82F6" alt="Phase 7D Complete" />
 </p>
 
 <p align="center">
@@ -105,6 +105,8 @@ Babylon.js renders changes in the 3D world
 
 **Steering Behaviors**: A pure-math [Craig Reynolds steering library](src/integration/bridge/steering.ts) ships with the SDK — seek, flee, arrive, pursue, evade, wander, obstacle avoidance, separation, cohesion, alignment, and tether. Composable via weighted blending for behaviors like tethered wander guards, boids flocking, and chase agents with leash ranges.
 
+**Combat Presets**: Declarative [combat configuration](src/integration/bridge/combat.ts) for projectiles, explosions, melee attacks, turrets, and tracking missiles. Same pattern as steering presets — pure data, no engine dependency. Configure damage, speed, lifespan, and particle trails; the host engine handles the physics.
+
 ## Project Structure
 
 ```
@@ -115,13 +117,14 @@ src/
   transpiler/   LSL → TypeScript transpiler (preprocessor, tokenizer, parser, codegen)
   editor/       Monaco-based script editor
   integration/  Host integration layer (ADR-004)
-    protocol/   ScriptCommand (59 types) + ScriptEvent typed contracts
+    protocol/   ScriptCommand (71 types) + ScriptEvent typed contracts
     bundle/     OAR bundle parser + batch transpiler
-    host/       ScriptHostAdapter + CommandRouter (44 method→command mappings)
+    host/       ScriptHostAdapter + CommandRouter (57 method→command mappings)
     bridge/     Reference BabylonBridge, event forwarder, media surface
       steering.ts       Craig Reynolds steering behaviors (pure math)
       npc-behavior.ts   Patrol/wander/follow/guard FSMs
       media-surface.ts  Media-on-a-prim (video, iframe, WebRTC)
+      combat.ts         CombatPresets (projectile, explosion, melee, turret)
 examples/       Example scripts
 docs/adr/       Architecture Decision Records
 ```
@@ -139,7 +142,7 @@ docs/adr/       Architecture Decision Records
 | 7A. Bridge | **Done** | Reference BabylonBridge, event forwarder, structural typing ([ADR-004](docs/adr/ADR-004-scripter-owns-world-scripting.md)) |
 | 7B. Media | **Done** | Media-on-a-prim: video, iframe, WebRTC surfaces with CSP policy |
 | 7C. NPC & Steering | **Done** | Craig Reynolds steering behaviors, NPC behavior FSMs, 14 osNpc* handlers |
-| 7D. Physics & Sensors | **Next** | Sensor sweeps, `llCastRay`, rez/die lifecycle, terrain queries |
+| 7D. Physics & Combat | **Done** | Physics extended (17 ll* functions), combat presets, rez/die lifecycle, terrain queries |
 
 ## The Ecosystem
 

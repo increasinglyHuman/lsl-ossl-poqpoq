@@ -264,6 +264,11 @@ export const LSL_CONSTANTS: Record<string, string> = {
   PRIM_TYPE_RING: "6",
   PRIM_TYPE_SCULPT: "7",
 
+  // Physics Shape Types
+  PRIM_PHYSICS_SHAPE_PRIM: "0",
+  PRIM_PHYSICS_SHAPE_NONE: "1",
+  PRIM_PHYSICS_SHAPE_CONVEX: "2",
+
   // Materials
   PRIM_MATERIAL_STONE: "0",
   PRIM_MATERIAL_METAL: "1",

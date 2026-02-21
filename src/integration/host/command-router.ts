@@ -293,6 +293,34 @@ export class CommandRouter {
       case "world.npcClearSteering":
         return { type: "npcClearSteering", npcId: args[0] as string };
 
+      // === Physics Extended (Phase 7D) ===
+      case "object.setStatus":
+        return { type: "setStatus", objectId: containerId, flags: args[0] as number, value: args[1] as boolean };
+      case "object.setDamage":
+        return { type: "setDamage", objectId: containerId, damage: args[0] as number };
+      case "world.pushObject":
+        return { type: "pushObject", targetId: args[0] as string, impulse: args[1] as Vec3, angularImpulse: args[2] as Vec3, local: (args[3] as boolean) ?? false };
+      case "object.setTorque":
+        return { type: "setTorque", objectId: containerId, torque: args[0] as Vec3, local: (args[1] as boolean) ?? false };
+      case "object.volumeDetect":
+        return { type: "volumeDetect", objectId: containerId, enabled: args[0] as boolean };
+      case "object.collisionFilter":
+        return { type: "collisionFilter", objectId: containerId, name: args[0] as string, id: args[1] as string, accept: args[2] as boolean };
+      case "object.setBuoyancy":
+        return { type: "setBuoyancy", objectId: containerId, buoyancy: args[0] as number };
+      case "object.stopMoveToTarget":
+        return { type: "stopMoveToTarget", objectId: containerId };
+      case "object.lookAt":
+        return { type: "lookAt", objectId: containerId, target: args[0] as Vec3, strength: args[1] as number, damping: args[2] as number };
+      case "object.stopLookAt":
+        return { type: "stopLookAt", objectId: containerId };
+      case "object.setPhysicsShape":
+        return { type: "setPhysicsShape", objectId: containerId, shapeType: args[0] as number, params: args[1] as unknown[] };
+      case "object.rez":
+        return { type: "rezObject", objectId: containerId, inventory: args[0] as string, position: args[1] as Vec3, velocity: args[2] as Vec3, rotation: args[3] as Quat, startParam: args[4] as number };
+      case "object.rezAtRoot":
+        return { type: "rezAtRoot", objectId: containerId, inventory: args[0] as string, position: args[1] as Vec3, velocity: args[2] as Vec3, rotation: args[3] as Quat, startParam: args[4] as number };
+
       // === Built-in methods handled by ScriptManager ===
       // These return null → the caller skips them (handled upstream)
       case "world.setTimer":

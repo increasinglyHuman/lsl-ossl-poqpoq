@@ -378,7 +378,7 @@ describe("ReferenceBabylonBridge", () => {
       const npc = createFullNpcMock();
       const bridge = new ReferenceBabylonBridge(createMockScene(), { npc });
       bridge.handle(envelope({ type: "npcSetRotation", npcId: "npc-1", rotation: { x: 0, y: 0.7, z: 0, s: 0.7 } }));
-      expect(npc.setRotation).toHaveBeenCalledWith("npc-1", { x: 0, y: 0.7, z: 0, s: 0.7 });
+      expect(npc.setRotation).toHaveBeenCalledWith("npc-1", { x: 0, y: 0.7, z: 0, w: 0.7 });
     });
 
     it("npcGetPosition returns position from NPC manager", () => {
@@ -434,6 +434,125 @@ describe("ReferenceBabylonBridge", () => {
       const bridge = new ReferenceBabylonBridge(createMockScene(), { npc });
       bridge.handle(envelope({ type: "npcClearSteering", npcId: "npc-1" }));
       expect(npc.clearSteering).toHaveBeenCalledWith("npc-1");
+    });
+  });
+
+  describe("Phase 7D: Physics extended commands", () => {
+    function createPhysicsMock() {
+      return {
+        applyForce: vi.fn(), applyImpulse: vi.fn(), configure: vi.fn(),
+        setStatus: vi.fn(), setDamage: vi.fn(), pushObject: vi.fn(),
+        setTorque: vi.fn(), volumeDetect: vi.fn(), collisionFilter: vi.fn(),
+        setBuoyancy: vi.fn(), stopMoveToTarget: vi.fn(), lookAt: vi.fn(),
+        stopLookAt: vi.fn(), setPhysicsShape: vi.fn(),
+      };
+    }
+
+    it("setStatus delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "setStatus", objectId: "obj-1", flags: 0x01, value: true }));
+      expect(physics.setStatus).toHaveBeenCalledWith("obj-1", 0x01, true);
+    });
+
+    it("setDamage delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "setDamage", objectId: "obj-1", damage: 100 }));
+      expect(physics.setDamage).toHaveBeenCalledWith("obj-1", 100);
+    });
+
+    it("pushObject delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "pushObject", targetId: "target-1", impulse: { x: 0, y: 10, z: 0 }, angularImpulse: { x: 0, y: 0, z: 1 }, local: false }));
+      expect(physics.pushObject).toHaveBeenCalledWith("target-1", { x: 0, y: 10, z: 0 }, { x: 0, y: 0, z: 1 }, false);
+    });
+
+    it("setTorque delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "setTorque", objectId: "obj-1", torque: { x: 0, y: 5, z: 0 }, local: true }));
+      expect(physics.setTorque).toHaveBeenCalledWith("obj-1", { x: 0, y: 5, z: 0 }, true);
+    });
+
+    it("volumeDetect delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "volumeDetect", objectId: "obj-1", enabled: true }));
+      expect(physics.volumeDetect).toHaveBeenCalledWith("obj-1", true);
+    });
+
+    it("collisionFilter delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "collisionFilter", objectId: "obj-1", name: "enemy", id: "uuid-1", accept: true }));
+      expect(physics.collisionFilter).toHaveBeenCalledWith("obj-1", "enemy", "uuid-1", true);
+    });
+
+    it("setBuoyancy delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "setBuoyancy", objectId: "obj-1", buoyancy: 1.0 }));
+      expect(physics.setBuoyancy).toHaveBeenCalledWith("obj-1", 1.0);
+    });
+
+    it("stopMoveToTarget delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "stopMoveToTarget", objectId: "obj-1" }));
+      expect(physics.stopMoveToTarget).toHaveBeenCalledWith("obj-1");
+    });
+
+    it("lookAt delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "lookAt", objectId: "obj-1", target: { x: 10, y: 0, z: 10 }, strength: 1.0, damping: 0.5 }));
+      expect(physics.lookAt).toHaveBeenCalledWith("obj-1", { x: 10, y: 0, z: 10 }, 1.0, 0.5);
+    });
+
+    it("stopLookAt delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "stopLookAt", objectId: "obj-1" }));
+      expect(physics.stopLookAt).toHaveBeenCalledWith("obj-1");
+    });
+
+    it("setPhysicsShape delegates to physics system", () => {
+      const physics = createPhysicsMock();
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { physics });
+      bridge.handle(envelope({ type: "setPhysicsShape", objectId: "obj-1", shapeType: 2, params: [] }));
+      expect(physics.setPhysicsShape).toHaveBeenCalledWith("obj-1", 2, []);
+    });
+  });
+
+  describe("Phase 7D: Lifecycle extended commands", () => {
+    it("rezObject delegates to inventory system", () => {
+      const inventory = { rez: vi.fn(), rezAtRoot: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { inventory });
+      bridge.handle(envelope({
+        type: "rezObject", objectId: "obj-1", inventory: "bullet",
+        position: { x: 1, y: 2, z: 3 }, velocity: { x: 0, y: 0, z: 10 },
+        rotation: { x: 0, y: 0, z: 0, s: 1 }, startParam: 0,
+      }));
+      expect(inventory.rez).toHaveBeenCalledWith(
+        "obj-1", "bullet", { x: 1, y: 2, z: 3 }, { x: 0, y: 0, z: 10 },
+        { x: 0, y: 0, z: 0, w: 1 }, 0,
+      );
+    });
+
+    it("rezAtRoot delegates to inventory system", () => {
+      const inventory = { rez: vi.fn(), rezAtRoot: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(createMockScene(), { inventory });
+      bridge.handle(envelope({
+        type: "rezAtRoot", objectId: "obj-1", inventory: "tower",
+        position: { x: 5, y: 0, z: 5 }, velocity: { x: 0, y: 0, z: 0 },
+        rotation: { x: 0, y: 0, z: 0, s: 1 }, startParam: 42,
+      }));
+      expect(inventory.rezAtRoot).toHaveBeenCalledWith(
+        "obj-1", "tower", { x: 5, y: 0, z: 5 }, { x: 0, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0, w: 1 }, 42,
+      );
     });
   });
 

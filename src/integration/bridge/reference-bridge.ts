@@ -139,9 +139,35 @@ export class ReferenceBabylonBridge {
       case "sensorRemove":
         return this.systems.sensor?.sensorRemove(scriptId);
 
+      // === Physics Extended (Phase 7D) ===
+      case "setStatus":
+        return this.systems.physics?.setStatus?.(cmd.objectId, cmd.flags, cmd.value);
+      case "setDamage":
+        return this.systems.physics?.setDamage?.(cmd.objectId, cmd.damage);
+      case "pushObject":
+        return this.systems.physics?.pushObject?.(cmd.targetId, cmd.impulse, cmd.angularImpulse, cmd.local);
+      case "setTorque":
+        return this.systems.physics?.setTorque?.(cmd.objectId, cmd.torque, cmd.local);
+      case "volumeDetect":
+        return this.systems.physics?.volumeDetect?.(cmd.objectId, cmd.enabled);
+      case "collisionFilter":
+        return this.systems.physics?.collisionFilter?.(cmd.objectId, cmd.name, cmd.id, cmd.accept);
+      case "setBuoyancy":
+        return this.systems.physics?.setBuoyancy?.(cmd.objectId, cmd.buoyancy);
+      case "stopMoveToTarget":
+        return this.systems.physics?.stopMoveToTarget?.(cmd.objectId);
+      case "lookAt":
+        return this.systems.physics?.lookAt?.(cmd.objectId, cmd.target, cmd.strength, cmd.damping);
+      case "stopLookAt":
+        return this.systems.physics?.stopLookAt?.(cmd.objectId);
+      case "setPhysicsShape":
+        return this.systems.physics?.setPhysicsShape?.(cmd.objectId, cmd.shapeType, cmd.params);
+
       // === Lifecycle ===
       case "rezObject":
-        return undefined; // Requires inventory system — forward to host
+        return this.systems.inventory?.rez(cmd.objectId, cmd.inventory, cmd.position, cmd.velocity, { x: cmd.rotation.x, y: cmd.rotation.y, z: cmd.rotation.z, w: cmd.rotation.s }, cmd.startParam);
+      case "rezAtRoot":
+        return this.systems.inventory?.rezAtRoot(cmd.objectId, cmd.inventory, cmd.position, cmd.velocity, { x: cmd.rotation.x, y: cmd.rotation.y, z: cmd.rotation.z, w: cmd.rotation.s }, cmd.startParam);
       case "die": {
         const mesh = this.findMesh(cmd.objectId);
         mesh?.dispose?.();

@@ -439,6 +439,91 @@ export interface NpcClearSteeringCommand {
   readonly npcId: string;
 }
 
+// === Phase 7D: Physics Extended, Combat & Environment ===
+
+export interface SetStatusCommand {
+  readonly type: "setStatus";
+  readonly objectId: string;
+  readonly flags: number;
+  readonly value: boolean;
+}
+
+export interface SetDamageCommand {
+  readonly type: "setDamage";
+  readonly objectId: string;
+  readonly damage: number;
+}
+
+export interface PushObjectCommand {
+  readonly type: "pushObject";
+  readonly targetId: string;
+  readonly impulse: Vec3;
+  readonly angularImpulse: Vec3;
+  readonly local: boolean;
+}
+
+export interface SetTorqueCommand {
+  readonly type: "setTorque";
+  readonly objectId: string;
+  readonly torque: Vec3;
+  readonly local: boolean;
+}
+
+export interface VolumeDetectCommand {
+  readonly type: "volumeDetect";
+  readonly objectId: string;
+  readonly enabled: boolean;
+}
+
+export interface CollisionFilterCommand {
+  readonly type: "collisionFilter";
+  readonly objectId: string;
+  readonly name: string;
+  readonly id: string;
+  readonly accept: boolean;
+}
+
+export interface SetBuoyancyCommand {
+  readonly type: "setBuoyancy";
+  readonly objectId: string;
+  readonly buoyancy: number;
+}
+
+export interface StopMoveToTargetCommand {
+  readonly type: "stopMoveToTarget";
+  readonly objectId: string;
+}
+
+export interface LookAtCommand {
+  readonly type: "lookAt";
+  readonly objectId: string;
+  readonly target: Vec3;
+  readonly strength: number;
+  readonly damping: number;
+}
+
+export interface StopLookAtCommand {
+  readonly type: "stopLookAt";
+  readonly objectId: string;
+}
+
+export interface SetPhysicsShapeCommand {
+  readonly type: "setPhysicsShape";
+  readonly objectId: string;
+  readonly shapeType: number;
+  readonly params: readonly unknown[];
+}
+
+export interface RezAtRootCommand {
+  readonly type: "rezAtRoot";
+  readonly objectId: string;
+  readonly inventory: string;
+  readonly position: Vec3;
+  readonly velocity: Vec3;
+  readonly rotation: Quat;
+  readonly startParam: number;
+}
+
 // === Discriminated Union ===
 
 export type ScriptCommand =
@@ -511,7 +596,20 @@ export type ScriptCommand =
   | NpcStopMoveCommand
   // Steering
   | NpcSetSteeringCommand
-  | NpcClearSteeringCommand;
+  | NpcClearSteeringCommand
+  // Phase 7D: Physics Extended, Combat & Environment
+  | SetStatusCommand
+  | SetDamageCommand
+  | PushObjectCommand
+  | SetTorqueCommand
+  | VolumeDetectCommand
+  | CollisionFilterCommand
+  | SetBuoyancyCommand
+  | StopMoveToTargetCommand
+  | LookAtCommand
+  | StopLookAtCommand
+  | SetPhysicsShapeCommand
+  | RezAtRootCommand;
 
 // === Envelope (adds routing metadata) ===
 

@@ -416,6 +416,110 @@ describe("FunctionResolver", () => {
     });
   });
 
+  describe("Phase 7D: physics, combat & environment functions", () => {
+    it("resolves llSetStatus to this.object.setStatus", () => {
+      const result = resolver.resolve("llSetStatus", ["STATUS_PHYSICS", "TRUE"]);
+      expect(result.template).toBe("this.object.setStatus(STATUS_PHYSICS, TRUE)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llGetStatus to this.object.getStatus", () => {
+      const result = resolver.resolve("llGetStatus", ["STATUS_PHYSICS"]);
+      expect(result.template).toBe("this.object.getStatus(STATUS_PHYSICS)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llSetDamage to this.object.setDamage", () => {
+      const result = resolver.resolve("llSetDamage", ["100.0"]);
+      expect(result.template).toBe("this.object.setDamage(100.0)");
+      expect(result.category).toBe("combat");
+    });
+
+    it("resolves llRezObject to this.object.rez", () => {
+      const result = resolver.resolve("llRezObject", ['"bullet"', "pos", "vel", "rot", "0"]);
+      expect(result.template).toBe('this.object.rez("bullet", pos, vel, rot, 0)');
+      expect(result.category).toBe("object");
+    });
+
+    it("resolves llRezAtRoot to this.object.rezAtRoot", () => {
+      const result = resolver.resolve("llRezAtRoot", ['"obj"', "pos", "vel", "rot", "1"]);
+      expect(result.template).toBe('this.object.rezAtRoot("obj", pos, vel, rot, 1)');
+      expect(result.category).toBe("object");
+    });
+
+    it("resolves llPushObject to this.world.pushObject", () => {
+      const result = resolver.resolve("llPushObject", ["targetId", "impulse", "angImpulse", "FALSE"]);
+      expect(result.template).toBe("this.world.pushObject(targetId, impulse, angImpulse, FALSE)");
+      expect(result.category).toBe("combat");
+    });
+
+    it("resolves llStopMoveToTarget to this.object.stopMoveToTarget", () => {
+      const result = resolver.resolve("llStopMoveToTarget", []);
+      expect(result.template).toBe("this.object.stopMoveToTarget()");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llSetTorque to this.object.setTorque", () => {
+      const result = resolver.resolve("llSetTorque", ["torque", "TRUE"]);
+      expect(result.template).toBe("this.object.setTorque(torque, TRUE)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llVolumeDetect to this.object.volumeDetect", () => {
+      const result = resolver.resolve("llVolumeDetect", ["TRUE"]);
+      expect(result.template).toBe("this.object.volumeDetect(TRUE)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llCollisionFilter to this.object.collisionFilter", () => {
+      const result = resolver.resolve("llCollisionFilter", ['"name"', '"id"', "TRUE"]);
+      expect(result.template).toBe('this.object.collisionFilter("name", "id", TRUE)');
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llSetBuoyancy to this.object.setBuoyancy", () => {
+      const result = resolver.resolve("llSetBuoyancy", ["1.0"]);
+      expect(result.template).toBe("this.object.setBuoyancy(1.0)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llWater to this.world.getWaterHeight", () => {
+      const result = resolver.resolve("llWater", ["pos"]);
+      expect(result.template).toBe("this.world.getWaterHeight(pos)");
+      expect(result.category).toBe("environment");
+    });
+
+    it("resolves llGroundNormal to this.world.getGroundNormal", () => {
+      const result = resolver.resolve("llGroundNormal", ["offset"]);
+      expect(result.template).toBe("this.world.getGroundNormal(offset)");
+      expect(result.category).toBe("environment");
+    });
+
+    it("resolves llGroundSlope to this.world.getGroundSlope", () => {
+      const result = resolver.resolve("llGroundSlope", ["offset"]);
+      expect(result.template).toBe("this.world.getGroundSlope(offset)");
+      expect(result.category).toBe("environment");
+    });
+
+    it("resolves llSetPhysicsShapeType to this.object.setPhysicsShape", () => {
+      const result = resolver.resolve("llSetPhysicsShapeType", ["PRIM_PHYSICS_SHAPE_CONVEX", "[]"]);
+      expect(result.template).toBe("this.object.setPhysicsShape(PRIM_PHYSICS_SHAPE_CONVEX, [])");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llLookAt to this.object.lookAt", () => {
+      const result = resolver.resolve("llLookAt", ["target", "1.0", "0.5"]);
+      expect(result.template).toBe("this.object.lookAt(target, 1.0, 0.5)");
+      expect(result.category).toBe("physics");
+    });
+
+    it("resolves llStopLookAt to this.object.stopLookAt", () => {
+      const result = resolver.resolve("llStopLookAt", []);
+      expect(result.template).toBe("this.object.stopLookAt()");
+      expect(result.category).toBe("physics");
+    });
+  });
+
   describe("media functions", () => {
     it("resolves llSetPrimMediaParams to this.object.setMediaParams", () => {
       const result = resolver.resolve("llSetPrimMediaParams", ["0", "[2, url]"]);
