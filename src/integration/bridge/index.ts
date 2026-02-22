@@ -51,5 +51,7 @@ export type {
   MediaSurfaceLike,
   EnvironmentSystemLike,
   InventorySystemLike,
+  DialogSystemLike,
+  AttachmentSystemLike,
   HostSystems,
 } from "./engine-types.js";

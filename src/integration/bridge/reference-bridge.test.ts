@@ -652,6 +652,117 @@ describe("ReferenceBabylonBridge", () => {
     });
   });
 
+  describe("Phase 8: dialogs, HUDs & inventory", () => {
+    function createDialogMock() {
+      return { textBox: vi.fn(), loadURL: vi.fn(), mapDestination: vi.fn() };
+    }
+
+    function createAttachmentMock() {
+      return { attach: vi.fn(), detach: vi.fn() };
+    }
+
+    it("textBox delegates to dialog system", () => {
+      const scene = createMockScene([]);
+      const dialog = createDialogMock();
+      const bridge = new ReferenceBabylonBridge(scene, { dialog } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "textBox", agentId: "agent-1", message: "Enter name:", channel: 99 }));
+
+      expect(dialog.textBox).toHaveBeenCalledWith("agent-1", "Enter name:", 99);
+    });
+
+    it("textBox falls back to chat.showDialog when no dialog system", () => {
+      const scene = createMockScene([]);
+      const chat = { say: vi.fn(), whisper: vi.fn(), shout: vi.fn(), regionSay: vi.fn(), instantMessage: vi.fn(), showDialog: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(scene, { chat } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "textBox", agentId: "agent-1", message: "Enter:", channel: 5 }));
+
+      expect(chat.showDialog).toHaveBeenCalledWith("agent-1", "Enter:", [], 5, "obj-1");
+    });
+
+    it("loadURL delegates to dialog system", () => {
+      const scene = createMockScene([]);
+      const dialog = createDialogMock();
+      const bridge = new ReferenceBabylonBridge(scene, { dialog } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "loadURL", agentId: "agent-1", message: "Visit us", url: "https://example.com" }));
+
+      expect(dialog.loadURL).toHaveBeenCalledWith("agent-1", "Visit us", "https://example.com");
+    });
+
+    it("mapDestination delegates to dialog system", () => {
+      const scene = createMockScene([]);
+      const dialog = createDialogMock();
+      const bridge = new ReferenceBabylonBridge(scene, { dialog } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "mapDestination", simName: "Sandbox", position: { x: 128, y: 128, z: 50 }, lookAt: { x: 0, y: 0, z: 0 } }));
+
+      expect(dialog.mapDestination).toHaveBeenCalledWith("Sandbox", { x: 128, y: 128, z: 50 }, { x: 0, y: 0, z: 0 });
+    });
+
+    it("regionSayTo delegates to chat system", () => {
+      const scene = createMockScene([]);
+      const chat = { say: vi.fn(), whisper: vi.fn(), shout: vi.fn(), regionSay: vi.fn(), instantMessage: vi.fn(), regionSayTo: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(scene, { chat } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "regionSayTo", targetId: "target-1", channel: 42, message: "hello" }));
+
+      expect(chat.regionSayTo).toHaveBeenCalledWith("target-1", 42, "hello");
+    });
+
+    it("giveInventory delegates to inventory system", () => {
+      const scene = createMockScene([]);
+      const inventory = { rez: vi.fn(), rezAtRoot: vi.fn(), give: vi.fn(), giveList: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(scene, { inventory } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "giveInventory", targetId: "target-1", inventory: "sword" }));
+
+      expect(inventory.give).toHaveBeenCalledWith("obj-1", "target-1", "sword");
+    });
+
+    it("giveInventoryList delegates to inventory system", () => {
+      const scene = createMockScene([]);
+      const inventory = { rez: vi.fn(), rezAtRoot: vi.fn(), give: vi.fn(), giveList: vi.fn() };
+      const bridge = new ReferenceBabylonBridge(scene, { inventory } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "giveInventoryList", targetId: "target-1", folder: "Gifts", inventory: ["a", "b"] }));
+
+      expect(inventory.giveList).toHaveBeenCalledWith("obj-1", "target-1", "Gifts", ["a", "b"]);
+    });
+
+    it("getNotecardLine delegates to inventory system", () => {
+      const scene = createMockScene([]);
+      const inventory = { rez: vi.fn(), rezAtRoot: vi.fn(), getNotecardLine: vi.fn().mockReturnValue("line data") };
+      const bridge = new ReferenceBabylonBridge(scene, { inventory } as unknown as HostSystems);
+
+      const result = bridge.handle(envelope({ type: "getNotecardLine", objectId: "obj-1", notecard: "config", line: 3 }));
+
+      expect(inventory.getNotecardLine).toHaveBeenCalledWith("obj-1", "config", 3);
+      expect(result).toBe("line data");
+    });
+
+    it("attach delegates to attachment system", () => {
+      const scene = createMockScene([]);
+      const attachment = createAttachmentMock();
+      const bridge = new ReferenceBabylonBridge(scene, { attachment } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "attach", objectId: "obj-1", attachPoint: 35, temp: true }));
+
+      expect(attachment.attach).toHaveBeenCalledWith("obj-1", 35, true);
+    });
+
+    it("detach delegates to attachment system", () => {
+      const scene = createMockScene([]);
+      const attachment = createAttachmentMock();
+      const bridge = new ReferenceBabylonBridge(scene, { attachment } as unknown as HostSystems);
+
+      bridge.handle(envelope({ type: "detach", objectId: "obj-1" }));
+
+      expect(attachment.detach).toHaveBeenCalledWith("obj-1");
+    });
+  });
+
   describe("unknown commands", () => {
     it("returns undefined for unknown command types", () => {
       const scene = createMockScene([]);

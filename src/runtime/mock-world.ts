@@ -179,6 +179,10 @@ export class MockWorldObject implements WorldObject {
     return null;
   }
 
+  // === Inventory & Attachment ===
+  allowInventoryDrop(allow: boolean): void { this.log("allowInventoryDrop", allow); }
+  getAttached(): number { return 0; }
+
   // === Media on Prim ===
   setMediaParams(face: number, params: unknown[]): number {
     this.log("setMediaParams", face, params);
@@ -247,13 +251,54 @@ export class MockContainer implements ScriptContainer {
     this.object = object;
   }
 
+  private static readonly TYPE_MAP: Record<string, number> = {
+    texture: 0, sound: 1, landmark: 3, clothing: 5, object: 6,
+    notecard: 7, script: 10, bodypart: 13, animation: 20,
+  };
+
+  private static readonly REVERSE_TYPE_MAP: Record<number, AssetType> = {
+    0: "texture", 1: "sound", 3: "landmark", 5: "clothing", 6: "object",
+    7: "notecard", 10: "script", 13: "bodypart", 20: "animation",
+  };
+
   getAsset(name: string): Asset | null { return this.assets.get(name) ?? null; }
   getAssets(type?: AssetType): Asset[] {
     const all = [...this.assets.values()];
     return type ? all.filter((a) => a.type === type) : all;
   }
   hasAsset(name: string): boolean { return this.assets.has(name); }
-  getAssetCount(type?: AssetType): number { return this.getAssets(type).length; }
+  getAssetCount(type?: AssetType | number): number {
+    if (typeof type === "number") {
+      const assetType = MockContainer.REVERSE_TYPE_MAP[type];
+      return assetType ? this.getAssets(assetType).length : 0;
+    }
+    return this.getAssets(type).length;
+  }
+
+  getAssetName(type: AssetType | number, index: number): string {
+    const assetType = typeof type === "number" ? MockContainer.REVERSE_TYPE_MAP[type] : type;
+    if (!assetType) return "";
+    const filtered = this.getAssets(assetType);
+    return filtered[index]?.name ?? "";
+  }
+
+  getAssetType(name: string): number {
+    const asset = this.assets.get(name);
+    if (!asset) return -1;
+    return MockContainer.TYPE_MAP[asset.type] ?? -1;
+  }
+
+  getAssetCreator(name: string): string {
+    return this.assets.has(name) ? "creator-0" : "";
+  }
+
+  getAssetPermMask(_name: string, _mask: number): number {
+    return 0x7FFFFFFF;
+  }
+
+  removeAsset(name: string): void {
+    this.assets.delete(name);
+  }
 
   sendLinkMessage(link: LinkTarget, num: number, str: string, id: string): void {
     if (this.linkMessageCallback) {

@@ -321,6 +321,30 @@ export class CommandRouter {
       case "object.rezAtRoot":
         return { type: "rezAtRoot", objectId: containerId, inventory: args[0] as string, position: args[1] as Vec3, velocity: args[2] as Vec3, rotation: args[3] as Quat, startParam: args[4] as number };
 
+      // === Phase 8: Dialogs, HUDs & Inventory ===
+      case "world.textBox":
+        return { type: "textBox", agentId: args[0] as string, message: args[1] as string, channel: args[2] as number };
+      case "world.loadURL":
+        return { type: "loadURL", agentId: args[0] as string, message: args[1] as string, url: args[2] as string };
+      case "world.mapDestination":
+        return { type: "mapDestination", simName: args[0] as string, position: args[1] as Vec3, lookAt: args[2] as Vec3 };
+      case "world.regionSayTo":
+        return { type: "regionSayTo", targetId: args[0] as string, channel: args[1] as number, message: args[2] as string };
+      case "world.giveInventory":
+        return { type: "giveInventory", targetId: args[0] as string, inventory: args[1] as string };
+      case "world.giveInventoryList":
+        return { type: "giveInventoryList", targetId: args[0] as string, folder: args[1] as string, inventory: args[2] as string[] };
+      case "world.getNotecardLine":
+        return { type: "getNotecardLine", objectId: containerId, notecard: args[0] as string, line: args[1] as number };
+      case "world.getNumberOfNotecardLines":
+        return { type: "getNotecardLineCount", objectId: containerId, notecard: args[0] as string };
+      case "world.attachToAvatar":
+        return { type: "attach", objectId: containerId, attachPoint: args[0] as number, temp: false };
+      case "world.attachToAvatarTemp":
+        return { type: "attach", objectId: containerId, attachPoint: args[0] as number, temp: true };
+      case "world.detachFromAvatar":
+        return { type: "detach", objectId: containerId };
+
       // === Built-in methods handled by ScriptManager ===
       // These return null → the caller skips them (handled upstream)
       case "world.setTimer":

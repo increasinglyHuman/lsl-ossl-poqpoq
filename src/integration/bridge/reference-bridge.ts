@@ -213,6 +213,29 @@ export class ReferenceBabylonBridge {
       case "npcClearSteering":
         return this.systems.npc?.clearSteering?.(cmd.npcId);
 
+      // === Phase 8: Dialogs, HUDs & Inventory ===
+      case "textBox":
+        return this.systems.dialog?.textBox(cmd.agentId, cmd.message, cmd.channel)
+          ?? this.systems.chat?.showDialog?.(cmd.agentId, cmd.message, [], cmd.channel, containerId);
+      case "loadURL":
+        return this.systems.dialog?.loadURL(cmd.agentId, cmd.message, cmd.url);
+      case "mapDestination":
+        return this.systems.dialog?.mapDestination(cmd.simName, cmd.position, cmd.lookAt);
+      case "regionSayTo":
+        return this.systems.chat?.regionSayTo?.(cmd.targetId, cmd.channel, cmd.message);
+      case "giveInventory":
+        return this.systems.inventory?.give?.(containerId, cmd.targetId, cmd.inventory);
+      case "giveInventoryList":
+        return this.systems.inventory?.giveList?.(containerId, cmd.targetId, cmd.folder, cmd.inventory);
+      case "getNotecardLine":
+        return this.systems.inventory?.getNotecardLine?.(cmd.objectId, cmd.notecard, cmd.line);
+      case "getNotecardLineCount":
+        return this.systems.inventory?.getNotecardLineCount?.(cmd.objectId, cmd.notecard);
+      case "attach":
+        return this.systems.attachment?.attach(cmd.objectId, cmd.attachPoint, cmd.temp);
+      case "detach":
+        return this.systems.attachment?.detach(cmd.objectId);
+
       default:
         return undefined;
     }

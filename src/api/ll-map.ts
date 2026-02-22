@@ -37,10 +37,10 @@ export const LSL_FUNCTION_MAP: FunctionMapping[] = [
   { lsl: "llWhisper", api: "this.whisper(channel, message)", category: "communication", status: "mapped" },
   { lsl: "llShout", api: "this.shout(channel, message)", category: "communication", status: "mapped" },
   { lsl: "llRegionSay", api: "this.world.regionSay(channel, message)", category: "communication", status: "mapped" },
-  { lsl: "llRegionSayTo", api: "this.world.getAgent(id)?.sendMessage(message)", category: "communication", status: "mapped" },
+  { lsl: "llRegionSayTo", api: "this.world.regionSayTo(id, ch, msg)", category: "communication", status: "mapped" },
   { lsl: "llListen", api: "this.listen(channel, name, id, message)", category: "communication", status: "mapped" },
   { lsl: "llListenRemove", api: "handle.remove()", category: "communication", status: "mapped", notes: "Uses handle pattern instead of integer ID" },
-  { lsl: "llInstantMessage", api: "this.world.getAgent(id)?.sendMessage(message)", category: "communication", status: "mapped" },
+  { lsl: "llInstantMessage", api: "this.world.instantMessage(av, msg)", category: "communication", status: "mapped" },
   { lsl: "llOwnerSay", api: "this.say(0, message)", category: "communication", status: "mapped", notes: "Channel 0 to owner only" },
   { lsl: "llMessageLinked", api: "this.sendLinkMessage(link, num, str, id)", category: "communication", status: "mapped", notes: "Broadcasts within container; supports LINK_SET, LINK_THIS, LINK_ROOT, LINK_ALL_OTHERS, LINK_ALL_CHILDREN" },
 
@@ -184,6 +184,33 @@ export const LSL_FUNCTION_MAP: FunctionMapping[] = [
   { lsl: "llSetLinkMedia", api: "this.object.getLink(link)?.setMediaParams(face, rules)", category: "media", status: "mapped" },
   { lsl: "llClearLinkMedia", api: "this.object.getLink(link)?.clearMedia(face)", category: "media", status: "mapped" },
   { lsl: "llGetLinkMedia", api: "this.object.getLink(link)?.getMediaParams(face, rules)", category: "media", status: "mapped" },
+
+  // === Dialog / UI ===
+  { lsl: "llDialog", api: "this.world.dialog(av, msg, buttons, ch)", category: "dialog", status: "mapped" },
+  { lsl: "llTextBox", api: "this.world.textBox(av, msg, ch)", category: "dialog", status: "mapped" },
+  { lsl: "llLoadURL", api: "this.world.loadURL(av, msg, url)", category: "dialog", status: "mapped" },
+  { lsl: "llMapDestination", api: "this.world.mapDestination(sim, pos, look)", category: "dialog", status: "mapped" },
+
+  // === Inventory ===
+  { lsl: "llGetInventoryNumber", api: "this.container.getAssetCount(type)", category: "inventory", status: "mapped" },
+  { lsl: "llGetInventoryName", api: "this.container.getAssetName(type, index)", category: "inventory", status: "mapped" },
+  { lsl: "llGetInventoryType", api: "this.container.getAssetType(name)", category: "inventory", status: "mapped" },
+  { lsl: "llGetInventoryKey", api: "this.container.getAsset(name)?.id", category: "inventory", status: "mapped" },
+  { lsl: "llGetInventoryCreator", api: "this.container.getAssetCreator(name)", category: "inventory", status: "mapped" },
+  { lsl: "llGetInventoryPermMask", api: "this.container.getAssetPermMask(name, mask)", category: "inventory", status: "mapped" },
+  { lsl: "llAllowInventoryDrop", api: "this.object.allowInventoryDrop(flag)", category: "inventory", status: "mapped" },
+  { lsl: "llGiveInventory", api: "this.world.giveInventory(dest, name)", category: "inventory", status: "mapped" },
+  { lsl: "llGiveInventoryList", api: "this.world.giveInventoryList(dest, folder, items)", category: "inventory", status: "mapped" },
+  { lsl: "llRemoveInventory", api: "this.container.removeAsset(name)", category: "inventory", status: "mapped" },
+
+  // === Notecard ===
+  { lsl: "llGetNumberOfNotecardLines", api: "await this.world.getNumberOfNotecardLines(name)", category: "data", status: "mapped", notes: "Async — returns key, triggers dataserver" },
+
+  // === Attachment ===
+  { lsl: "llAttachToAvatar", api: "this.world.attachToAvatar(point)", category: "agent", status: "mapped" },
+  { lsl: "llAttachToAvatarTemp", api: "this.world.attachToAvatarTemp(point)", category: "agent", status: "mapped" },
+  { lsl: "llDetachFromAvatar", api: "this.world.detachFromAvatar()", category: "agent", status: "mapped" },
+  { lsl: "llGetAttached", api: "this.object.getAttached()", category: "agent", status: "mapped" },
 ];
 
 /** Quick lookup by LSL function name */

@@ -520,6 +520,160 @@ describe("FunctionResolver", () => {
     });
   });
 
+  describe("Phase 8: dialogs, HUDs & inventory", () => {
+    // Dialog / UI
+    it("resolves llDialog to this.world.dialog", () => {
+      const result = resolver.resolve("llDialog", ["avatarId", '"Choose:"', '["A", "B"]', "42"]);
+      expect(result.template).toBe('this.world.dialog(avatarId, "Choose:", ["A", "B"], 42)');
+      expect(result.category).toBe("dialog");
+    });
+
+    it("resolves llTextBox to this.world.textBox", () => {
+      const result = resolver.resolve("llTextBox", ["avatarId", '"Enter name:"', "99"]);
+      expect(result.template).toBe('this.world.textBox(avatarId, "Enter name:", 99)');
+      expect(result.category).toBe("dialog");
+    });
+
+    it("resolves llLoadURL to this.world.loadURL", () => {
+      const result = resolver.resolve("llLoadURL", ["avatarId", '"Visit us"', '"https://example.com"']);
+      expect(result.template).toBe('this.world.loadURL(avatarId, "Visit us", "https://example.com")');
+      expect(result.category).toBe("dialog");
+    });
+
+    it("resolves llMapDestination to this.world.mapDestination", () => {
+      const result = resolver.resolve("llMapDestination", ['"Sandbox"', "pos", "look"]);
+      expect(result.template).toBe('this.world.mapDestination("Sandbox", pos, look)');
+      expect(result.category).toBe("dialog");
+    });
+
+    // Communication gap-fill
+    it("resolves llRegionSayTo to this.world.regionSayTo", () => {
+      const result = resolver.resolve("llRegionSayTo", ["targetId", "0", '"hello"']);
+      expect(result.template).toBe('this.world.regionSayTo(targetId, 0, "hello")');
+      expect(result.category).toBe("communication");
+    });
+
+    it("resolves llInstantMessage to this.world.instantMessage", () => {
+      const result = resolver.resolve("llInstantMessage", ["avatarId", '"message"']);
+      expect(result.template).toBe('this.world.instantMessage(avatarId, "message")');
+      expect(result.category).toBe("communication");
+    });
+
+    // Inventory queries
+    it("resolves llGetInventoryNumber to this.container.getAssetCount", () => {
+      const result = resolver.resolve("llGetInventoryNumber", ["INVENTORY_SOUND"]);
+      expect(result.template).toBe("this.container.getAssetCount(INVENTORY_SOUND)");
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGetInventoryName to this.container.getAssetName", () => {
+      const result = resolver.resolve("llGetInventoryName", ["INVENTORY_SOUND", "0"]);
+      expect(result.template).toBe("this.container.getAssetName(INVENTORY_SOUND, 0)");
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGetInventoryType to this.container.getAssetType", () => {
+      const result = resolver.resolve("llGetInventoryType", ['"notecard1"']);
+      expect(result.template).toBe('this.container.getAssetType("notecard1")');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGetInventoryKey to container getAsset with null-coalesce", () => {
+      const result = resolver.resolve("llGetInventoryKey", ['"script1"']);
+      expect(result.template).toBe('(this.container.getAsset("script1")?.id ?? NULL_KEY)');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGetInventoryCreator to this.container.getAssetCreator", () => {
+      const result = resolver.resolve("llGetInventoryCreator", ['"item"']);
+      expect(result.template).toBe('this.container.getAssetCreator("item")');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGetInventoryPermMask to this.container.getAssetPermMask", () => {
+      const result = resolver.resolve("llGetInventoryPermMask", ['"item"', "MASK_OWNER"]);
+      expect(result.template).toBe('this.container.getAssetPermMask("item", MASK_OWNER)');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llAllowInventoryDrop to this.object.allowInventoryDrop", () => {
+      const result = resolver.resolve("llAllowInventoryDrop", ["TRUE"]);
+      expect(result.template).toBe("this.object.allowInventoryDrop(TRUE)");
+      expect(result.category).toBe("inventory");
+    });
+
+    // Inventory actions
+    it("resolves llGiveInventory to this.world.giveInventory", () => {
+      const result = resolver.resolve("llGiveInventory", ["targetId", '"item"']);
+      expect(result.template).toBe('this.world.giveInventory(targetId, "item")');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llGiveInventoryList to this.world.giveInventoryList", () => {
+      const result = resolver.resolve("llGiveInventoryList", ["targetId", '"folder"', "items"]);
+      expect(result.template).toBe('this.world.giveInventoryList(targetId, "folder", items)');
+      expect(result.category).toBe("inventory");
+    });
+
+    it("resolves llRemoveInventory to this.container.removeAsset", () => {
+      const result = resolver.resolve("llRemoveInventory", ['"old_script"']);
+      expect(result.template).toBe('this.container.removeAsset("old_script")');
+      expect(result.category).toBe("inventory");
+    });
+
+    // Notecard (async)
+    it("resolves llGetNotecardLine as async", () => {
+      const result = resolver.resolve("llGetNotecardLine", ['"config"', "0"]);
+      expect(result.template).toBe('await this.world.getNotecardLine("config", 0)');
+      expect(result.needsAwait).toBe(true);
+      expect(result.needsAsync).toBe(true);
+      expect(result.category).toBe("data");
+    });
+
+    it("resolves llGetNumberOfNotecardLines as async", () => {
+      const result = resolver.resolve("llGetNumberOfNotecardLines", ['"config"']);
+      expect(result.template).toBe('await this.world.getNumberOfNotecardLines("config")');
+      expect(result.needsAwait).toBe(true);
+      expect(result.needsAsync).toBe(true);
+      expect(result.category).toBe("data");
+    });
+
+    // Attachment
+    it("resolves llAttachToAvatar to this.world.attachToAvatar", () => {
+      const result = resolver.resolve("llAttachToAvatar", ["ATTACH_CHEST"]);
+      expect(result.template).toBe("this.world.attachToAvatar(ATTACH_CHEST)");
+      expect(result.category).toBe("agent");
+    });
+
+    it("resolves llAttachToAvatarTemp to this.world.attachToAvatarTemp", () => {
+      const result = resolver.resolve("llAttachToAvatarTemp", ["ATTACH_HUD_CENTER"]);
+      expect(result.template).toBe("this.world.attachToAvatarTemp(ATTACH_HUD_CENTER)");
+      expect(result.category).toBe("agent");
+    });
+
+    it("resolves llDetachFromAvatar to this.world.detachFromAvatar", () => {
+      const result = resolver.resolve("llDetachFromAvatar", []);
+      expect(result.template).toBe("this.world.detachFromAvatar()");
+      expect(result.category).toBe("agent");
+    });
+
+    it("resolves llGetAttached to this.object.getAttached", () => {
+      const result = resolver.resolve("llGetAttached", []);
+      expect(result.template).toBe("this.object.getAttached()");
+      expect(result.category).toBe("agent");
+    });
+  });
+
+  describe("Phase 8 async function set additions", () => {
+    it("should contain llGetNotecardLine", () => {
+      expect(FunctionResolver.ASYNC_FUNCTIONS.has("llGetNotecardLine")).toBe(true);
+    });
+
+    it("should contain llGetNumberOfNotecardLines", () => {
+      expect(FunctionResolver.ASYNC_FUNCTIONS.has("llGetNumberOfNotecardLines")).toBe(true);
+    });
+  });
+
   describe("media functions", () => {
     it("resolves llSetPrimMediaParams to this.object.setMediaParams", () => {
       const result = resolver.resolve("llSetPrimMediaParams", ["0", "[2, url]"]);

@@ -164,6 +164,13 @@ export interface WorldObject {
   canCopy(): boolean;
   canTransfer(): boolean;
 
+  // === Inventory & Attachment ===
+  /** Allow/disallow inventory drops — maps to llAllowInventoryDrop */
+  allowInventoryDrop(allow: boolean): void;
+
+  /** Get the attachment point this object is attached to (0 = not attached) — maps to llGetAttached */
+  getAttached(): number;
+
   // === Raycasting ===
   /** Cast a ray from this object */
   raycast(direction: Vector3, distance: number): import("./events.js").RaycastHit | null;

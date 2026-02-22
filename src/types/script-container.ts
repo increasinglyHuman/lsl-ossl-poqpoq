@@ -88,7 +88,33 @@ export interface ScriptContainer {
   /**
    * Get the number of assets of a given type — maps to llGetInventoryNumber(type)
    */
-  getAssetCount(type?: AssetType): number;
+  getAssetCount(type?: AssetType | number): number;
+
+  /**
+   * Get asset name by type and index — maps to llGetInventoryName(type, index)
+   */
+  getAssetName(type: AssetType | number, index: number): string;
+
+  /**
+   * Get asset type as LSL integer — maps to llGetInventoryType(name)
+   * Returns -1 (INVENTORY_NONE) if not found.
+   */
+  getAssetType(name: string): number;
+
+  /**
+   * Get asset creator key — maps to llGetInventoryCreator(name)
+   */
+  getAssetCreator(name: string): string;
+
+  /**
+   * Get asset permission mask — maps to llGetInventoryPermMask(name, mask)
+   */
+  getAssetPermMask(name: string, mask: number): number;
+
+  /**
+   * Remove an asset from inventory — maps to llRemoveInventory(name)
+   */
+  removeAsset(name: string): void;
 
   // === Inter-Script Messaging ===
 

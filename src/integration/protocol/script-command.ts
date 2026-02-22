@@ -129,6 +129,82 @@ export interface DialogCommand {
   readonly channel: number;
 }
 
+// === Phase 8: Dialog/UI Extended Commands ===
+
+export interface TextBoxCommand {
+  readonly type: "textBox";
+  readonly agentId: string;
+  readonly message: string;
+  readonly channel: number;
+}
+
+export interface LoadURLCommand {
+  readonly type: "loadURL";
+  readonly agentId: string;
+  readonly message: string;
+  readonly url: string;
+}
+
+export interface MapDestinationCommand {
+  readonly type: "mapDestination";
+  readonly simName: string;
+  readonly position: Vec3;
+  readonly lookAt: Vec3;
+}
+
+// === Phase 8: Communication Extended ===
+
+export interface RegionSayToCommand {
+  readonly type: "regionSayTo";
+  readonly targetId: string;
+  readonly channel: number;
+  readonly message: string;
+}
+
+// === Phase 8: Inventory Action Commands ===
+
+export interface GiveInventoryCommand {
+  readonly type: "giveInventory";
+  readonly targetId: string;
+  readonly inventory: string;
+}
+
+export interface GiveInventoryListCommand {
+  readonly type: "giveInventoryList";
+  readonly targetId: string;
+  readonly folder: string;
+  readonly inventory: string[];
+}
+
+// === Phase 8: Notecard Commands ===
+
+export interface GetNotecardLineCommand {
+  readonly type: "getNotecardLine";
+  readonly objectId: string;
+  readonly notecard: string;
+  readonly line: number;
+}
+
+export interface GetNotecardLineCountCommand {
+  readonly type: "getNotecardLineCount";
+  readonly objectId: string;
+  readonly notecard: string;
+}
+
+// === Phase 8: Attachment Commands ===
+
+export interface AttachCommand {
+  readonly type: "attach";
+  readonly objectId: string;
+  readonly attachPoint: number;
+  readonly temp: boolean;
+}
+
+export interface DetachCommand {
+  readonly type: "detach";
+  readonly objectId: string;
+}
+
 // === Effects Commands ===
 
 export interface PlaySoundCommand {
@@ -609,7 +685,18 @@ export type ScriptCommand =
   | LookAtCommand
   | StopLookAtCommand
   | SetPhysicsShapeCommand
-  | RezAtRootCommand;
+  | RezAtRootCommand
+  // Phase 8: Dialogs, HUDs & Inventory
+  | TextBoxCommand
+  | LoadURLCommand
+  | MapDestinationCommand
+  | RegionSayToCommand
+  | GiveInventoryCommand
+  | GiveInventoryListCommand
+  | GetNotecardLineCommand
+  | GetNotecardLineCountCommand
+  | AttachCommand
+  | DetachCommand;
 
 // === Envelope (adds routing metadata) ===
 

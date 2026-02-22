@@ -1103,6 +1103,212 @@ const SPECIAL_HANDLERS: Record<string, (args: string[]) => ResolvedFunction> = {
     lslName: "llStopLookAt",
     category: "physics",
   }),
+
+  // ── Phase 8: Dialogs, HUDs & Inventory ───────────────────
+
+  // --- Dialog / UI ---
+  llDialog: (args) => ({
+    kind: "method",
+    template: `this.world.dialog(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llDialog",
+    category: "dialog",
+  }),
+
+  llTextBox: (args) => ({
+    kind: "method",
+    template: `this.world.textBox(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llTextBox",
+    category: "dialog",
+  }),
+
+  llLoadURL: (args) => ({
+    kind: "method",
+    template: `this.world.loadURL(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llLoadURL",
+    category: "dialog",
+  }),
+
+  llMapDestination: (args) => ({
+    kind: "method",
+    template: `this.world.mapDestination(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llMapDestination",
+    category: "dialog",
+  }),
+
+  // --- Communication gap-fill ---
+  llRegionSayTo: (args) => ({
+    kind: "method",
+    template: `this.world.regionSayTo(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llRegionSayTo",
+    category: "communication",
+  }),
+
+  llInstantMessage: (args) => ({
+    kind: "method",
+    template: `this.world.instantMessage(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llInstantMessage",
+    category: "communication",
+  }),
+
+  // --- Inventory queries (local container ops) ---
+  llGetInventoryNumber: (args) => ({
+    kind: "method",
+    template: `this.container.getAssetCount(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryNumber",
+    category: "inventory",
+  }),
+
+  llGetInventoryName: (args) => ({
+    kind: "method",
+    template: `this.container.getAssetName(${args[0]}, ${args[1]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryName",
+    category: "inventory",
+  }),
+
+  llGetInventoryType: (args) => ({
+    kind: "method",
+    template: `this.container.getAssetType(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryType",
+    category: "inventory",
+  }),
+
+  llGetInventoryKey: (args) => ({
+    kind: "special",
+    template: `(this.container.getAsset(${args[0]})?.id ?? NULL_KEY)`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryKey",
+    category: "inventory",
+  }),
+
+  llGetInventoryCreator: (args) => ({
+    kind: "method",
+    template: `this.container.getAssetCreator(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryCreator",
+    category: "inventory",
+  }),
+
+  llGetInventoryPermMask: (args) => ({
+    kind: "method",
+    template: `this.container.getAssetPermMask(${args[0]}, ${args[1]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetInventoryPermMask",
+    category: "inventory",
+  }),
+
+  llAllowInventoryDrop: (args) => ({
+    kind: "method",
+    template: `this.object.allowInventoryDrop(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llAllowInventoryDrop",
+    category: "inventory",
+  }),
+
+  // --- Inventory actions ---
+  llGiveInventory: (args) => ({
+    kind: "method",
+    template: `this.world.giveInventory(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGiveInventory",
+    category: "inventory",
+  }),
+
+  llGiveInventoryList: (args) => ({
+    kind: "method",
+    template: `this.world.giveInventoryList(${args.join(", ")})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGiveInventoryList",
+    category: "inventory",
+  }),
+
+  llRemoveInventory: (args) => ({
+    kind: "method",
+    template: `this.container.removeAsset(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llRemoveInventory",
+    category: "inventory",
+  }),
+
+  // --- Notecard (async — returns dataserver key) ---
+  llGetNotecardLine: (args) => ({
+    kind: "special",
+    template: `await this.world.getNotecardLine(${args.join(", ")})`,
+    needsAwait: true,
+    needsAsync: true,
+    lslName: "llGetNotecardLine",
+    category: "data",
+  }),
+
+  llGetNumberOfNotecardLines: (args) => ({
+    kind: "special",
+    template: `await this.world.getNumberOfNotecardLines(${args[0]})`,
+    needsAwait: true,
+    needsAsync: true,
+    lslName: "llGetNumberOfNotecardLines",
+    category: "data",
+  }),
+
+  // --- Attachment ---
+  llAttachToAvatar: (args) => ({
+    kind: "method",
+    template: `this.world.attachToAvatar(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llAttachToAvatar",
+    category: "agent",
+  }),
+
+  llAttachToAvatarTemp: (args) => ({
+    kind: "method",
+    template: `this.world.attachToAvatarTemp(${args[0]})`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llAttachToAvatarTemp",
+    category: "agent",
+  }),
+
+  llDetachFromAvatar: () => ({
+    kind: "method",
+    template: `this.world.detachFromAvatar()`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llDetachFromAvatar",
+    category: "agent",
+  }),
+
+  llGetAttached: () => ({
+    kind: "method",
+    template: `this.object.getAttached()`,
+    needsAwait: false,
+    needsAsync: false,
+    lslName: "llGetAttached",
+    category: "agent",
+  }),
 };
 
 // ============================================================
@@ -1206,6 +1412,8 @@ export class FunctionResolver {
   static readonly ASYNC_FUNCTIONS = new Set([
     "llSleep",
     "llHTTPRequest",
+    "llGetNotecardLine",
+    "llGetNumberOfNotecardLines",
     "osNpcCreate",
     "osNpcRemove",
     "osNpcMoveTo",

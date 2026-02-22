@@ -607,6 +607,141 @@ describe("CommandRouter", () => {
     });
   });
 
+  describe("Phase 8: dialogs, HUDs & inventory", () => {
+    it("routes world.textBox", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.textBox", ["agent-1", "Enter name:", 99]);
+      expect(received[0].type).toBe("textBox");
+      if (received[0].type === "textBox") {
+        expect(received[0].agentId).toBe("agent-1");
+        expect(received[0].message).toBe("Enter name:");
+        expect(received[0].channel).toBe(99);
+      }
+    });
+
+    it("routes world.loadURL", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.loadURL", ["agent-1", "Visit us", "https://example.com"]);
+      expect(received[0].type).toBe("loadURL");
+      if (received[0].type === "loadURL") {
+        expect(received[0].url).toBe("https://example.com");
+      }
+    });
+
+    it("routes world.mapDestination", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.mapDestination", ["Sandbox", { x: 128, y: 128, z: 50 }, { x: 0, y: 0, z: 0 }]);
+      expect(received[0].type).toBe("mapDestination");
+      if (received[0].type === "mapDestination") {
+        expect(received[0].simName).toBe("Sandbox");
+        expect(received[0].position).toEqual({ x: 128, y: 128, z: 50 });
+      }
+    });
+
+    it("routes world.regionSayTo", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.regionSayTo", ["target-1", 42, "hello"]);
+      expect(received[0].type).toBe("regionSayTo");
+      if (received[0].type === "regionSayTo") {
+        expect(received[0].targetId).toBe("target-1");
+        expect(received[0].channel).toBe(42);
+        expect(received[0].message).toBe("hello");
+      }
+    });
+
+    it("routes world.giveInventory", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.giveInventory", ["target-1", "sword"]);
+      expect(received[0].type).toBe("giveInventory");
+      if (received[0].type === "giveInventory") {
+        expect(received[0].targetId).toBe("target-1");
+        expect(received[0].inventory).toBe("sword");
+      }
+    });
+
+    it("routes world.giveInventoryList", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.giveInventoryList", ["target-1", "Gifts", ["item1", "item2"]]);
+      expect(received[0].type).toBe("giveInventoryList");
+      if (received[0].type === "giveInventoryList") {
+        expect(received[0].folder).toBe("Gifts");
+        expect(received[0].inventory).toEqual(["item1", "item2"]);
+      }
+    });
+
+    it("routes world.getNotecardLine", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.getNotecardLine", ["config", 3]);
+      expect(received[0].type).toBe("getNotecardLine");
+      if (received[0].type === "getNotecardLine") {
+        expect(received[0].notecard).toBe("config");
+        expect(received[0].line).toBe(3);
+        expect(received[0].objectId).toBe("container-A");
+      }
+    });
+
+    it("routes world.getNumberOfNotecardLines", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.getNumberOfNotecardLines", ["config"]);
+      expect(received[0].type).toBe("getNotecardLineCount");
+      if (received[0].type === "getNotecardLineCount") {
+        expect(received[0].notecard).toBe("config");
+      }
+    });
+
+    it("routes world.attachToAvatar", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.attachToAvatar", [1]);
+      expect(received[0].type).toBe("attach");
+      if (received[0].type === "attach") {
+        expect(received[0].attachPoint).toBe(1);
+        expect(received[0].temp).toBe(false);
+        expect(received[0].objectId).toBe("container-A");
+      }
+    });
+
+    it("routes world.attachToAvatarTemp", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.attachToAvatarTemp", [35]);
+      expect(received[0].type).toBe("attach");
+      if (received[0].type === "attach") {
+        expect(received[0].attachPoint).toBe(35);
+        expect(received[0].temp).toBe(true);
+      }
+    });
+
+    it("routes world.detachFromAvatar", async () => {
+      const router = createRouter();
+      const received: ScriptCommand[] = [];
+      router.onCommand((env) => { received.push(env.command); });
+      await router.resolve("script-1", "world.detachFromAvatar", []);
+      expect(received[0].type).toBe("detach");
+      if (received[0].type === "detach") {
+        expect(received[0].objectId).toBe("container-A");
+      }
+    });
+  });
+
   describe("HTTP and permissions", () => {
     it("routes world.httpRequest", async () => {
       const router = createRouter();

@@ -156,6 +156,7 @@ export interface ChatSystemLike {
   regionSay(channel: number, message: string, senderId?: string, senderName?: string): void;
   instantMessage(agentId: string, message: string): void;
   showDialog?(agentId: string, message: string, buttons: string[], channel: number, objectId?: string): void;
+  regionSayTo?(targetId: string, channel: number, message: string): void;
 }
 
 // === Particle Effects ===
@@ -193,6 +194,26 @@ export interface EnvironmentSystemLike {
 export interface InventorySystemLike {
   rez(objectId: string, inventory: string, position: Vec3Like, velocity: Vec3Like, rotation: QuatLike, startParam: number): void;
   rezAtRoot(objectId: string, inventory: string, position: Vec3Like, velocity: Vec3Like, rotation: QuatLike, startParam: number): void;
+  // Phase 8 extensions
+  give?(objectId: string, targetId: string, inventory: string): void;
+  giveList?(objectId: string, targetId: string, folder: string, inventory: string[]): void;
+  getNotecardLine?(objectId: string, notecard: string, line: number): string | Promise<string>;
+  getNotecardLineCount?(objectId: string, notecard: string): number | Promise<number>;
+}
+
+// === Dialog / UI System (Phase 8) ===
+
+export interface DialogSystemLike {
+  textBox(agentId: string, message: string, channel: number): void;
+  loadURL(agentId: string, message: string, url: string): void;
+  mapDestination(simName: string, position: Vec3Like, lookAt: Vec3Like): void;
+}
+
+// === Attachment System (Phase 8) ===
+
+export interface AttachmentSystemLike {
+  attach(objectId: string, attachPoint: number, temp?: boolean): void;
+  detach(objectId: string): void;
 }
 
 // === Media Surface ===
@@ -217,4 +238,6 @@ export interface HostSystems {
   textures?: TextureFactoryLike;
   environment?: EnvironmentSystemLike;
   inventory?: InventorySystemLike;
+  dialog?: DialogSystemLike;
+  attachment?: AttachmentSystemLike;
 }
