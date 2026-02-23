@@ -3,17 +3,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>poqpoq Script Editor</title>
+  <title>BlackBox Scripter</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; }
+    html, body { height: 100%; overflow: hidden; background: #0a0a0a; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    #app { width: 100%; height: 100%; }
+    #app { width: 100%; height: 100%; display: none; }
+
+    /* ── Welcome Screen ────────────────────────────────── */
+
+    .welcome-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      overflow: hidden;
+    }
+
+    .welcome-screen::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(123, 104, 238, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(123, 104, 238, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: grid-move 10s linear infinite;
+    }
+
+    @keyframes grid-move {
+      0%   { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Hero image — bottom-left */
+    .hero-image-container {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 50%; height: 80%;
+      max-width: 700px; max-height: 900px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .welcome-hero-image {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      object-position: bottom left;
+      opacity: 0.8;
+    }
+
+    /* Content — centered title + cube */
+    .welcome-content {
+      text-align: center;
+      max-width: 600px;
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .welcome-content h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      font-size: 48px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: #e0e0e0;
+      margin-bottom: 12px;
+    }
+    .welcome-content h2 .accent {
+      color: #7B68EE;
+      text-shadow:
+        0 0 20px rgba(123, 104, 238, 0.8),
+        0 0 40px rgba(123, 104, 238, 0.5),
+        0 0 60px rgba(123, 104, 238, 0.3);
+    }
+    .welcome-content p {
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      color: #888;
+      letter-spacing: 0.05em;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ── Start Button + Wireframe Cube ─────────────────── */
+
+    .start-btn {
+      width: 200px; height: 200px;
+      background: transparent;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      font-size: 24px; font-weight: 700;
+      color: #7B68EE;
+      cursor: pointer;
+      position: relative;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      text-shadow: 0 0 20px currentColor;
+      transition: all 0.3s;
+      margin: 0 auto;
+      perspective: 400px;
+    }
+    .start-btn:hover {
+      transform: scale(1.1);
+      color: #9B8BFF;
+    }
+    .start-btn:active {
+      transform: scale(0.95);
+    }
+
+    .start-box-container {
+      width: 120px; height: 120px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate-start-cube 3s linear infinite;
+    }
+    .start-box {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+    .start-box-face {
+      position: absolute;
+      width: 120px; height: 120px;
+      border: 3px solid #7B68EE;
+      background: rgba(123, 104, 238, 0.05);
+      box-shadow:
+        inset 0 0 30px rgba(123, 104, 238, 0.2),
+        0 0 30px rgba(123, 104, 238, 0.3);
+    }
+    .start-box-face.front  { transform: translateZ(60px); }
+    .start-box-face.back   { transform: rotateY(180deg) translateZ(60px); }
+    .start-box-face.left   { transform: rotateY(-90deg) translateZ(60px); }
+    .start-box-face.right  { transform: rotateY(90deg) translateZ(60px); }
+    .start-box-face.top    { transform: rotateX(90deg) translateZ(60px); }
+    .start-box-face.bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+    @keyframes rotate-start-cube {
+      0%   { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    /* ── Suite Footer ──────────────────────────────────── */
+
+    .suite-footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 28px;
+      background: rgba(26, 26, 26, 0.95);
+      border-top: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 2001;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      backdrop-filter: blur(10px);
+    }
+    .suite-footer a {
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .suite-footer a:hover {
+      color: #7B68EE;
+    }
+    .suite-footer .sep {
+      color: #444;
+    }
   </style>
 </head>
 <body>
+  <!-- Welcome Splash Screen -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <div class="hero-image-container">
+      <img src="resources/scripterHeroImg.png" alt="" class="welcome-hero-image">
+    </div>
+    <div class="welcome-content">
+      <h2>BLACK BOX <span class="accent">SCRIPTER</span></h2>
+      <p>LSL &rarr; TypeScript transpiler<br>for the open metaverse</p>
+      <button class="start-btn" id="welcomeStartBtn">
+        <div class="start-box-container" id="startCube">
+          <div class="start-box">
+            <div class="start-box-face front"></div>
+            <div class="start-box-face back"></div>
+            <div class="start-box-face left"></div>
+            <div class="start-box-face right"></div>
+            <div class="start-box-face top"></div>
+            <div class="start-box-face bottom"></div>
+          </div>
+        </div>
+        <span>START</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main App (hidden until START) -->
   <div id="app"></div>
+
+  <!-- Footer — BlackBox Creative Suite -->
+  <footer class="suite-footer">
+    <a href="https://poqpoq.com" target="_blank" rel="noopener">poqpoq.com</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/world/" target="_blank" rel="noopener">World</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/legacy/" target="_blank" rel="noopener">Legacy</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/animator/" target="_blank" rel="noopener">Animator</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/skinner/" target="_blank" rel="noopener">Skinner</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/terraformer/" target="_blank" rel="noopener">Terraformer</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/landscaper/" target="_blank" rel="noopener">Landscaper</a>
+    <span class="sep">|</span>
+    <a href="https://poqpoq.com/privacy" target="_blank" rel="noopener">Privacy</a>
+    <span class="sep">|</span>
+    <a href="https://github.com/increasinglyHuman" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+
   <script type="module" src="/src/editor/main.ts"></script>
 </body>
 </html>
