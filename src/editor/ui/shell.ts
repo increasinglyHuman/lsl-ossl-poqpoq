@@ -1,7 +1,7 @@
 /**
  * Shell — Main editor layout that assembles all UI components.
  *
- * Layout:
+ * Layout (without preview):
  * +------------------------------------------------------------------+
  * |  [Toolbar]                                                        |
  * +----------+-------------------------------------------------------+
@@ -11,6 +11,15 @@
  * |          |  +------------------------+------------------------+  |
  * |          |  [Error Panel]                                        |
  * +----------+-------------------------------------------------------+
+ *
+ * Layout (with preview):
+ * +------------------------------------------------------------------+
+ * |  [Toolbar]                                                        |
+ * +----------+---------------------------+---------------------------+
+ * |          |  [Tab Bar]                | [3D Preview Header]       |
+ * | Sidebar  |  [Editors]               | [Glitch iframe]           |
+ * |          |  [Error Panel]            | [Script Console]          |
+ * +----------+---------------------------+---------------------------+
  */
 
 import { Toolbar } from "./toolbar.js";
@@ -21,6 +30,7 @@ import { DualModeEditor } from "../dual-mode.js";
 import { EditorWrapper } from "../editor.js";
 import { EditorScriptManager } from "../script-manager.js";
 import { applyTheme, DARK_THEME, LIGHT_THEME, type EditorTheme } from "./theme.js";
+import { PreviewPanel } from "../preview/PreviewPanel.js";
 
 export class Shell {
   private container: HTMLElement;
@@ -32,8 +42,11 @@ export class Shell {
   private dualMode: DualModeEditor | null = null;
   private tsOnlyEditor: EditorWrapper | null = null;
   private editorContainer: HTMLElement;
+  private previewPanel: PreviewPanel | null = null;
+  private previewContainer: HTMLElement | null = null;
   private currentTheme: EditorTheme;
   private isDark = true;
+  private previewOpen = false;
 
   constructor(container: HTMLElement, scripts: EditorScriptManager) {
     this.container = container;
@@ -61,6 +74,7 @@ export class Shell {
       onThemeToggle: () => this.toggleTheme(),
       onImport: () => this.importFile(),
       onExport: () => this.exportFile(),
+      onPreview: () => this.togglePreview(),
     });
 
     // Sidebar
@@ -114,6 +128,7 @@ export class Shell {
 
   /** Clean up everything */
   dispose(): void {
+    this.previewPanel?.dispose();
     this.dualMode?.dispose();
     this.tsOnlyEditor?.dispose();
     this.toolbar.dispose();
@@ -192,6 +207,42 @@ export class Shell {
   transpileAndSave(): void {
     this.saveCurrentScript();
     this.dualMode?.transpileNow();
+  }
+
+  /** Toggle the 3D preview panel on/off */
+  private togglePreview(): void {
+    if (this.previewOpen) {
+      // Close preview
+      this.previewPanel?.dispose();
+      this.previewPanel = null;
+      this.previewContainer?.remove();
+      this.previewContainer = null;
+      this.previewOpen = false;
+
+      // Restore two-column layout
+      this.container.style.gridTemplateColumns = "auto 1fr";
+      this.layout();
+    } else {
+      // Open preview — add third column
+      this.previewOpen = true;
+      this.container.style.gridTemplateColumns = "auto 1fr 40%";
+
+      // Create preview container in the grid
+      this.previewContainer = document.createElement("div");
+      this.previewContainer.style.cssText = "grid-row: 2; overflow: hidden;";
+      this.container.appendChild(this.previewContainer);
+
+      // Create preview panel
+      this.previewPanel = new PreviewPanel(this.previewContainer, {
+        onEvent: (envelope) => {
+          // Touch events from Glitch — logged to console for now
+          // Full event dispatch will be wired in when ScriptHostAdapter is integrated
+          console.log("[Preview] Event:", envelope.event.type, envelope.objectId);
+        },
+      });
+
+      this.layout();
+    }
   }
 
   private toggleTheme(): void {
