@@ -3,9 +3,9 @@
  *
  * Lifecycle:
  * 1. Creates iframe pointing to Glitch with scripter type
- * 2. Waits for `glitch_ready` from iframe
- * 3. Sends `scripter_reset` + `scripter_create_prim` for root object
- * 4. Starts script execution, commands flow through PreviewRelay
+ * 2. On iframe load, sends `glitch_spawn` with scripter config
+ * 3. Waits for `glitch_ready` confirmation from Glitch
+ * 4. Commands flow through PreviewRelay, events flow back via postMessage
  * 5. Listens for touch/collision events from Glitch, dispatches to scripts
  *
  * @see ADR-005 (Glitch Preview Integration)
@@ -112,12 +112,26 @@ export class PreviewPanel {
 
     this.iframe = document.createElement("iframe");
     this.iframe.style.cssText = "width: 100%; height: 100%; border: none;";
-    this.iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
     this.iframe.setAttribute("allow", "autoplay");
 
     // Determine Glitch URL
     const baseUrl = this.options.glitchUrl ?? "/glitch/";
     const url = baseUrl + (baseUrl.includes("?") ? "&" : "?") + "embed=scripter";
+
+    // Send spawn payload once iframe has loaded (Glitch is waiting for it)
+    this.iframe.addEventListener("load", () => {
+      this.iframe?.contentWindow?.postMessage({
+        type: "glitch_spawn",
+        source: "parent",
+        payload: {
+          glitchType: "scripter",
+          label: "Script Preview",
+          camera: { mode: "orbit", distance: 5 },
+          options: { showGrid: true },
+        },
+      }, "*");
+    });
+
     this.iframe.src = url;
     parent.appendChild(this.iframe);
 
@@ -138,18 +152,6 @@ export class PreviewPanel {
           this.readyResolve?.();
           this.readyResolve = null;
           this.console.system("Preview connected");
-
-          // Send spawn payload to Glitch
-          this.iframe?.contentWindow?.postMessage({
-            type: "glitch_spawn",
-            source: "parent",
-            payload: {
-              glitchType: "scripter",
-              label: "Script Preview",
-              camera: { mode: "orbit", distance: 5 },
-              options: { showGrid: true },
-            },
-          }, "*");
           break;
 
         case "scripter_event":
